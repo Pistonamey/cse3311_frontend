@@ -14,7 +14,7 @@ function Photographer() {
     { id: 4, url: '/data/photos/photos9.png', alt: 'Photo 4' },
     { id: 5, url: '/data/photos/photo1.png', alt: 'Photo 5' },
     { id: 6, url: '/data/photos/photo4.png', alt: 'Photo 5' },
-    { id: 6, url: '/data/photos/photo3.png', alt: 'Photo 5' },
+    { id: 7, url: '/data/photos/photo3.png', alt: 'Photo 5' },
   ];
 
   return (
