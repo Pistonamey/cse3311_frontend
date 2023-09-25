@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import { CalendarMonthSharp } from '@mui/icons-material';
 
 function Profile({photoGrapherName}) {
   return (
@@ -24,6 +26,9 @@ function Profile({photoGrapherName}) {
           <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
             <TwitterIcon style={{ color: '#1DA1F2' }}/>
           </a>
+          <Link to={`/photographer/${photoGrapherName}/Booking`} style={{ color: '#FFF', textDecoration: 'none' }}>
+            Booking: <CalendarMonthSharp style={{ color: 'white' }}/>
+          </Link>
         </div>
       </div>
     </div>
