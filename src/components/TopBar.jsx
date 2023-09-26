@@ -17,7 +17,7 @@ function TopBar() {
       zIndex: 1000, // set a higher z-index
     }}>
        <Link to='/' style={{ color: '#FFF', textDecoration: 'none' }}>
-      Picsera
+      PixEra
       </Link>
     </div>
   );

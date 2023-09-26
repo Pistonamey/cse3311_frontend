@@ -8,13 +8,13 @@ function Photographer() {
   const { name } = useParams();
 
   const photos = [
-    { id: 1, url: '/data/photos/photos8.png', alt: 'Photo 1' },
-    { id: 2, url: '/data/photos/photos7.png', alt: 'Photo 2' },
-    { id: 3, url: '/data/photos/photos6.png', alt: 'Photo 3' },
-    { id: 4, url: '/data/photos/photos9.png', alt: 'Photo 4' },
-    { id: 5, url: '/data/photos/photo1.png', alt: 'Photo 5' },
-    { id: 6, url: '/data/photos/photo4.png', alt: 'Photo 5' },
-    { id: 8, url: '/data/photos/photo3.png', alt: 'Photo 5' },
+    { id: 1, url: '/data/photos/photo8.jpg', alt: 'Photo 1' },
+    { id: 2, url: '/data/photos/photo7.jpg', alt: 'Photo 2' },
+    { id: 3, url: '/data/photos/photo6.jpg', alt: 'Photo 3' },
+    { id: 4, url: '/data/photos/photo9.jpg', alt: 'Photo 4' },
+    { id: 5, url: '/data/photos/photo1.jpg', alt: 'Photo 5' },
+    { id: 6, url: '/data/photos/photo4.jpg', alt: 'Photo 5' },
+    { id: 8, url: '/data/photos/photo3.jpg', alt: 'Photo 5' },
   ];
 
   return (
