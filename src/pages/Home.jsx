@@ -1,6 +1,5 @@
 import React from 'react';
 import PhotoGrid from '../components/PhotoGrid';
-
 import TopBar from '../components/TopBar'; // I
 
 const photos = [
@@ -31,7 +30,7 @@ function Home() {
           <PhotoGrid photos={photos} photographerName="Piston" />
           <PhotoGrid photos={photos} photographerName="Legend" />
           <PhotoGrid photos={photos} photographerName="Micke" />
-          <PhotoGrid photos={photos} photographerName="Tun Ton" />
+          <PhotoGrid photos={photos} photographerName="Tun ton" />
         </div>
       </div>
     </>
