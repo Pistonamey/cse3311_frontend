@@ -1,7 +1,11 @@
+// Import necessary React library
 import React from 'react';
-import PhotoGrid from '../components/PhotoGrid';
-import TopBar from '../components/TopBar'; // I
 
+// Import custom components for use in this component
+import PhotoGrid from '../components/PhotoGrid';
+import TopBar from '../components/TopBar';
+
+// Sample photo data, representing a list of photo details
 const photos = [
   { id: 1, url: '/data/photos/photo1.jpg', alt: 'Photo 1' },
   { id: 2, url: '/data/photos/photo2.jpg', alt: 'Photo 2' },
@@ -12,20 +16,27 @@ const photos = [
   { id: 6, url: '/data/photos/photo3.jpg', alt: 'Photo 5' },
 ];
 
+// Define the Home component
 function Home() {
   return (
+    // Using React Fragment to group multiple children without adding extra nodes to the DOM
     <>
+      {/* Render the TopBar component */}
       <TopBar />
+
+      {/* A div container with dark background */}
       <div style={{
         backgroundColor: '#2C2C2C',
         color: '#FFF',
-        minHeight: 'calc(100vh - 60px)', // Adjusting the viewport height
-        width: '100%', // Updated from 100vw to 100%
+        minHeight: 'calc(100vh - 60px)',
+        width: '100%', // Use 100% to make the width responsive to the parent container
         overflowY: 'auto',
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-        <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}> {/* Inner div with padding and margin */}
+        {/* Inner div to provide padding and margin */}
+        <div style={{ padding: '20px', marginTop: '60px', width: '100%' }}>
+          {/* Render multiple instances of PhotoGrid component with different photographer names */}
           <PhotoGrid photos={photos} photographerName="Amey" />
           <PhotoGrid photos={photos} photographerName="Piston" />
           <PhotoGrid photos={photos} photographerName="Legend" />
@@ -37,4 +48,5 @@ function Home() {
   );
 }
 
+// Export the Home component to be used in other parts of the application
 export default Home;
