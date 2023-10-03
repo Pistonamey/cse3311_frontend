@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -32,6 +32,7 @@ const defaultTheme = createTheme();
 
 export default function Register() {
 const logo={ id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
+const google_logo={url:'/data/photos/google_logo.png'}
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -96,6 +97,17 @@ const logo={ id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
                 <TextField
                   required
                   fullWidth
+                  name="address"
+                  label="Address"
+              
+                  id="Address"
+                  autoComplete="new-address"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
                   label="Password"
                   type="password"
@@ -103,6 +115,7 @@ const logo={ id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
                   autoComplete="new-password"
                 />
               </Grid>
+              
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -118,6 +131,11 @@ const logo={ id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
             >
               Sign Up
             </Button>
+            <Typography sx={{textAlign:"center"}}>OR</Typography>
+            <Button component="label" variant="contained" startIcon={<GoogleIcon />} sx={{mt: 2, mb: 2}}fullWidth>
+            Sign Up with Google
+            </Button>
+            
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/login" variant="body2">

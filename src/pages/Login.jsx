@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -94,6 +94,10 @@ export default function Login() {
               sx={{ mt: 3, mb: 2,bgcolor:'black' }}
             >
               Sign In
+            </Button>
+            <Typography sx={{textAlign:"center"}}>OR</Typography>
+            <Button component="label" variant="contained" startIcon={<GoogleIcon />} sx={{mt: 2, mb: 2}}fullWidth>
+            Sign In with Google
             </Button>
             <Grid container>
               <Grid item xs>
