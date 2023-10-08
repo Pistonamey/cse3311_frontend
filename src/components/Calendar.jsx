@@ -15,6 +15,31 @@ import Badge from '@mui/material/Badge';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 
+import Button from '@mui/material/Button'; 
+import Dialog from '@mui/material/Dialog'; 
+import DialogTitle from '@mui/material/DialogTitle'; 
+import DialogContent from '@mui/material/DialogContent'; 
+import DialogActions from '@mui/material/DialogActions';
+
+function SimpleDialog(props) { 
+    const { onClose, open } = props; 
+    const handleClose = () => { onClose(); }; 
+  
+    return ( 
+        <Dialog onClose={handleClose} open={open}> 
+            <DialogTitle>Accept Alert</DialogTitle> 
+            <DialogContent dividers> 
+                <p>Are you sure you want to book this date?</p> 
+            </DialogContent> 
+            <DialogActions> 
+                <Button variant="outlined" color="success"> 
+                  Accept 
+                </Button> 
+            </DialogActions> 
+        </Dialog> 
+    ); 
+}
+
 function getRandomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
@@ -60,9 +85,9 @@ function ServerDay(props) {
 
 
 function ActionList(props) {
-  const { onAccept, onClear, onCancel, onSetToday, className } = props;
+  const {onClear, onCancel, onSetToday, className } = props;
   const actions = [
-    { text: 'Accept', method: onAccept },
+    //{ text: 'Accept', method: onAccept },
     { text: 'Clear', method: onClear },
     { text: 'Cancel', method: onCancel },
     { text: 'Today', method: onSetToday },
@@ -82,6 +107,10 @@ function ActionList(props) {
 }
 
 function Calendar({ photos, photographerName }) {
+  const [open, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true); }; 
+  const handleClose = () => { setOpen(false); };
+
   const requestAbortController = React.useRef(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
@@ -133,13 +162,10 @@ function Calendar({ photos, photographerName }) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <StaticDatePicker
                   DateCalendar
-                  defaultValue={initialValue}
+                  defaultValue={dayjs(new Date())} //setting todays date
                   loading={isLoading}
                   onMonthChange={handleMonthChange}
                   renderLoading={() => <DayCalendarSkeleton />}
-
-
-
 
                   slotProps={{
                     day: {
@@ -154,6 +180,9 @@ function Calendar({ photos, photographerName }) {
                   slots={{
                     day: ServerDay,
                     actionBar: ActionList,}}/>
+            <Button variant="outlined" color="success"
+              onClick={handleClickOpen}>Accept</Button> 
+            <SimpleDialog open={open} onClose={handleClose} /> 
                 </LocalizationProvider>
                 </p>
       </div>

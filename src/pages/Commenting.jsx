@@ -1,11 +1,15 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
 import { useParams } from 'react-router-dom';
-import Calendar from '../components/Calendar';
+import PhotoGrid from '../components/PhotoGrid';
 import Profile from '../components/Profile'; // Imp
-function Booking() {
+function Commenting() {
   // Getting the name parameter from the URL
-  const { name } = useParams();
+  const { photoid} = useParams();
+
+  const photos = [
+    { id: 1, url: '/data/photos/photos8.png', alt: 'Photo 1' },
+  ];
 
   return (
 
@@ -21,15 +25,16 @@ function Booking() {
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-          <div style={{ padding: '50px', marginTop: '60px',width:'150%' }}>
-    <Profile photoGrapherName={name}/>
+          <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}>
+    <Profile photoGrapherName={photoid}/>
      {/* Inner div with padding and margin */}
-          <Calendar/>
-        
+     <div style={{ padding: '20px', marginTop: '60px',width:'20%' }}>
+          <PhotoGrid photos={photos}  />
+          </div>
       </div>
     </div>
     </>
   );
 }
 
-export default Booking;
+export default Commenting;
