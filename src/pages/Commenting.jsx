@@ -5,7 +5,7 @@ import PhotoGrid from '../components/PhotoGrid';
 import Profile from '../components/Profile'; // Imp
 function Commenting() {
   // Getting the name parameter from the URL
-  const { photoid} = useParams();
+  const { photoid } = useParams();
 
   const photos = [
     { id: 1, url: '/data/photos/photos8.png', alt: 'Photo 1' },
