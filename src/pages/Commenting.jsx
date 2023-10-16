@@ -1,15 +1,11 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
-import { useParams } from 'react-router-dom';
-import PhotoGrid from '../components/PhotoGrid';
-import Profile from '../components/Profile'; // Imp
-function Commenting() {
-  // Getting the name parameter from the URL
-  const { photoid } = useParams();
+//import { useParams } from 'react-router-dom';
 
-  const photos = [
-    { id: 1, url: '/data/photos/photos8.png', alt: 'Photo 1' },
-  ];
+
+function Commenting({ photos, photographerName }) {
+  // Getting the name parameter from the URL
+  //const { photoid } = useParams();
 
   return (
 
@@ -25,14 +21,17 @@ function Commenting() {
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-          <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}>
-    <Profile photoGrapherName={photoid}/>
-     {/* Inner div with padding and margin */}
-     <div style={{ padding: '20px', marginTop: '60px',width:'20%' }}>
-          <PhotoGrid photos={photos}  />
-          </div>
+        
+     <div class="center" style={{    
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      }}>          
+          <img src={'/data/photos/photos8.png'} alt={'photo9'} style={{ width: '50%', height: 'auto' }} />
+          
+        </div>
+
       </div>
-    </div>
     </>
   );
 }
