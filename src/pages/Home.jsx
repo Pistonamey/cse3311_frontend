@@ -1,6 +1,6 @@
 // Import necessary React library
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
 // Import custom components for use in this component
 import PhotoGrid from '../components/PhotoGrid';
 import TopBar from '../components/TopBar';
@@ -18,25 +18,37 @@ const photos = [
 
 // Define the Home component
 function Home() {
-  return (
-    // Using React Fragment to group multiple children without adding extra nodes to the DOM
-    <>
-      {/* Render the TopBar component */}
-      <TopBar />
+  const location = useLocation();
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-      {/* A div container with dark background */}
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const token = params.get('token');
+  //   console.log(token)
+  //   if(token){
+  //     console.log("inhere")
+  //     setIsAuthenticated(true)
+  //   }
+  //   else{
+  //     console.log("came to false")
+  //     setIsAuthenticated(false)
+  //   }// Set isAuthenticated to true if token exists
+    
+  // }, [location]);
+  
+  return (
+    <>
+      <TopBar />
       <div style={{
         backgroundColor: '#2C2C2C',
         color: '#FFF',
-        minHeight: 'calc(100vh - 60px)',
-        width: '100%', // Use 100% to make the width responsive to the parent container
+        minHeight: 'calc(100vh - 60px)', // Adjusting the viewport height
+        width: '100%', // Updated from 100vw to 100%
         overflowY: 'auto',
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-        {/* Inner div to provide padding and margin */}
-        <div style={{ padding: '20px', marginTop: '60px', width: '100%' }}>
-          {/* Render multiple instances of PhotoGrid component with different photographer names */}
+        <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}> {/* Inner div with padding and margin */}
           <PhotoGrid photos={photos} photographerName="Amey" />
           <PhotoGrid photos={photos} photographerName="Piston" />
           <PhotoGrid photos={photos} photographerName="Legend" />
@@ -45,8 +57,8 @@ function Home() {
         </div>
       </div>
     </>
+      
   );
 }
 
-// Export the Home component to be used in other parts of the application
 export default Home;

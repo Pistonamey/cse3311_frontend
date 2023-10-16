@@ -1,5 +1,5 @@
 // Import necessary dependencies from the MUI library
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import GoogleIcon from '@mui/icons-material/Google';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate, useLocation } from 'react-router-dom'; // Updated import
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // Define a Copyright component that displays a copyright statement
@@ -19,7 +20,9 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="/home">PixEra</Link>{' '}
+      <Link color="inherit" href="/home">
+        PixEra
+      </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -31,9 +34,15 @@ const defaultTheme = createTheme();
 
 // Define the main Login component
 export default function Login() {
-
   // Sample logo data (you might get this from a prop or API call in a real-world scenario)
-  const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
+  const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' };
+  const navigate = useNavigate(); // Updated usage
+  const location = useLocation();
+  
+  // Function to store the token in local storage
+  const storeTokenInLocalStorage = (token) => {
+    localStorage.setItem('jwtToken', token);
+  };
 
   // Handle form submission
   const handleSubmit = (event) => {
@@ -43,6 +52,24 @@ export default function Login() {
       email: data.get('email'),
       password: data.get('password'),
     });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    console.log("triggered"+token)
+    if (token) {
+      // Store the token in local storage
+      storeTokenInLocalStorage(token);
+
+      // Redirect to /home using navigate
+      navigate(`/home`); // Updated navigation
+    }
+  }, [location, navigate]);
+
+  const handleGoogleLogin = () => {
+    // Redirect the user to the backend for Google authentication
+    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login`;
   };
 
   // Render the login component
@@ -58,7 +85,7 @@ export default function Login() {
             alignItems: 'center',
           }}
         >
-          <img width="140px" src={logo.url} alt="" height="140px"/>
+          <img width="140px" src={logo.url} alt="" height="140px" />
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -99,9 +126,16 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Typography sx={{ textAlign: "center" }}>OR</Typography>
+            <Typography sx={{ textAlign: 'center' }}>OR</Typography>
             {/* Google sign in button */}
-            <Button component="label" variant="contained" startIcon={<GoogleIcon />} sx={{ mt: 2, mb: 2 }} fullWidth>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<GoogleIcon />}
+              sx={{ mt: 2, mb: 2 }}
+              fullWidth
+              onClick={handleGoogleLogin}
+            >
               Sign In with Google
             </Button>
             <Grid container>

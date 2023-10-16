@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 // Render the main App component inside the concurrent root container 
 // within the React's StrictMode to highlight potential problems
 root.render(
-  <React.StrictMode>
+  
     <App />
-  </React.StrictMode>
+  
 );
