@@ -1,14 +1,12 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
-//import { useParams } from 'react-router-dom';
+import CommentSection from '../components/CommentSection';
 
-
-function Commenting({ photos, photographerName }) {
+function Commenting({photos}) {
   // Getting the name parameter from the URL
   //const { photoid } = useParams();
 
   return (
-
     <>
      <TopBar />
      <div style={{
@@ -21,14 +19,19 @@ function Commenting({ photos, photographerName }) {
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-        
-     <div class="center" style={{    
+
+     <div class="center" style={{
+      padding: '20px', 
+      marginTop: '40px',    
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       }}>          
-          <img src={'/data/photos/photos8.png'} alt={'photo9'} style={{ width: '50%', height: 'auto' }} />
-          
+        <img src='/data/photos/photos8.png' alt='photo9' style={{ width: '50%', height: 'auto' }} />
+        </div>
+
+        <div>
+        <CommentSection/>
         </div>
 
       </div>

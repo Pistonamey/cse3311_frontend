@@ -1,9 +1,7 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
 import { useParams } from 'react-router-dom';
-//import Calendar from '../components/Calendar';
-//import Calendar2 from '../components/Calendar2';
-import Calendar3 from '../components/Calendar3';
+import Calendar from '../components/Calendar';
 import "@progress/kendo-theme-default/dist/all.css";
 import Profile from '../components/Profile'; // Imp
 
@@ -12,7 +10,6 @@ function Booking() {
   const { name } = useParams();
 
   return (
-
     <>
      <TopBar />
      <div style={{
@@ -25,11 +22,18 @@ function Booking() {
         boxSizing: 'border-box',
         position: 'relative',
       }}>
-          <div style={{ padding: '50px', marginTop: '60px',width: '1000px'}}>
-    <Profile photoGrapherName={name}/>
-     {/* Inner div with padding and margin */}
-     <Calendar3 />
-        
+
+          <div class="center" style={{
+      padding: '20px', 
+      marginTop: '40px',    
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      }}>  
+      <div class="center" style={{
+      marginRight: '40px',    
+      }}><Profile photoGrapherName={name}/> </div>
+          <Calendar />
       </div>
     </div>
     </>
