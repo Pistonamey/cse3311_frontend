@@ -1,10 +1,14 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
 import CommentSection from '../components/CommentSection';
+import { useParams } from 'react-router-dom'; 
 
 function Commenting({photos}) {
   // Getting the name parameter from the URL
-  //const { photoid } = useParams();
+  const { photoid } = useParams();
+  console.log(photoid);
+  const photo_source='/data/photos/'+photoid 
+  console.log(photo_source)
 
   return (
     <>
@@ -27,7 +31,7 @@ function Commenting({photos}) {
       alignItems: 'center',
       justifyContent: 'center',
       }}>          
-        <img src='/data/photos/photos8.png' alt='photo9' style={{ width: '50%', height: 'auto' }} />
+        <img src={photo_source} alt='photo9' style={{ width: '50%', height: 'auto' }} />
         </div>
 
         <div>
