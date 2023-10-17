@@ -186,9 +186,9 @@ const UploadPhoto = () => {
                     <Button
                       fullWidth
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       startIcon={<CloudUploadIcon />}
-                      type="primary"
+                      type="submit"
                     >
                       Upload
                     </Button>
