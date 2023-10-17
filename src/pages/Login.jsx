@@ -69,7 +69,7 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     // Redirect the user to the backend for Google authentication
-    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login`;
+    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login_user`;
   };
 
   // Render the login component

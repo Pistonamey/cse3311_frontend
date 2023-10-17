@@ -59,6 +59,7 @@ function App() {
           <Routes>
             {/* Login page (set as the default route) */}
             <Route path="/" element={<Login />} />
+            
             {/* Login page (explicit path) */}
             {/* <Route path="/login" element={<Login />} /> */}
             {/* Register page */}
@@ -79,6 +80,19 @@ function App() {
                 isAuthenticated ? (
                   <PrivateRoute
                     element={<UploadPhoto />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute
+                    element={<Login />}
                     isAuthenticated={isAuthenticated}
                   />
                 ) : (
