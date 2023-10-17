@@ -1,7 +1,7 @@
 // Import necessary React and ReactDOM libraries
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
+import './index.css';
 // Import the main App component from the local App.js file
 import App from './App';
 

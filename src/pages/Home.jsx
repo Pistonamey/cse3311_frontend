@@ -4,6 +4,7 @@ import { useLocation, Navigate } from 'react-router-dom';
 // Import custom components for use in this component
 import PhotoGrid from '../components/PhotoGrid';
 import TopBar from '../components/TopBar';
+import MenuSidebar from '../components/MenuSidebar';
 
 // Sample photo data, representing a list of photo details
 const photos = [
@@ -12,7 +13,6 @@ const photos = [
   { id: 3, url: '/data/photos/photo3.jpg', alt: 'Photo 3' },
   { id: 4, url: '/data/photos/photo4.jpg', alt: 'Photo 4' },
   { id: 5, url: '/data/photos/photo5.jpg', alt: 'Photo 5' },
-  { id: 6, url: '/data/photos/photo3.jpg', alt: 'Photo 5' },
   { id: 6, url: '/data/photos/photo3.jpg', alt: 'Photo 5' },
 ];
 
@@ -38,6 +38,7 @@ function Home() {
   
   return (
     <>
+    
       <TopBar />
       <div style={{
         backgroundColor: '#2C2C2C',
@@ -48,6 +49,7 @@ function Home() {
         boxSizing: 'border-box',
         position: 'relative',
       }}>
+        {/* <MenuSidebar style={{ padding: '20px', marginTop: '60px'}}/> */}
         <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}> {/* Inner div with padding and margin */}
           <PhotoGrid photos={photos} photographerName="Amey" />
           <PhotoGrid photos={photos} photographerName="Piston" />
