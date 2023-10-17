@@ -1,13 +1,10 @@
 import React from 'react';
 import TopBar from '../components/TopBar'; 
-import { useParams } from 'react-router-dom';
-import Calendar from '../components/Calendar';
-import "@progress/kendo-theme-default/dist/all.css";
-import Profile from '../components/Profile'; // Imp
+import CommentSection from '../components/CommentSection';
 
-function Booking() {
+function Commenting({photos}) {
   // Getting the name parameter from the URL
-  const { name } = useParams();
+  //const { photoid } = useParams();
 
   return (
     <>
@@ -23,21 +20,23 @@ function Booking() {
         position: 'relative',
       }}>
 
-          <div class="center" style={{
+     <div class="center" style={{
       padding: '20px', 
       marginTop: '40px',    
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      }}>  
-      <div class="center" style={{
-      marginRight: '40px',    
-      }}><Profile photoGrapherName={name}/> </div>
-          <Calendar />
+      }}>          
+        <img src='/data/photos/photos8.png' alt='photo9' style={{ width: '50%', height: 'auto' }} />
+        </div>
+
+        <div>
+        <CommentSection/>
+        </div>
+
       </div>
-    </div>
     </>
   );
 }
 
-export default Booking;
+export default Commenting;

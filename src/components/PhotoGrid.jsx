@@ -36,12 +36,16 @@ function PhotoGrid({ photos, photographerName }) {
               </Link>
             )}
           </div>
+
           {/* Render the image */}
+          <Link to={`/photographer/${photographerName}/${photo.id}`} style={{ color: '#FFF', textDecoration: 'none' }}>
           <img 
             src={photo.url} 
             alt={photo.alt} 
             style={{ width: '190px', height: '120px' }} 
           />
+          </Link>
+
         </div>
       ))}
     </div>

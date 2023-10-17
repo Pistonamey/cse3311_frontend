@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-
-// Import individual page components
-import Home from './pages/Home';
+import Home from './pages/Home'; // Make sure to import the Home component
 import Photographer from './pages/Photographer';
 import Booking from './pages/Booking';
+import Commenting from './pages/Commenting';
+
+
+
+// Import individual page components
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
@@ -59,7 +62,7 @@ function App() {
           <Routes>
             {/* Login page (set as the default route) */}
             <Route path="/" element={<Login />} />
-            
+
             {/* Login page (explicit path) */}
             {/* <Route path="/login" element={<Login />} /> */}
             {/* Register page */}
@@ -104,11 +107,13 @@ function App() {
             <Route path="/photographer/:name" element={<Photographer />} />
             {/* Booking page under a specific photographer (with dynamic "name" parameter) */}
             <Route path="/photographer/:name/Booking" element={<Booking />} />
+            <Route path="/photographer/:name/:photoid" element={<Commenting />} />
             {/* You can add more routes here as your app grows */}
           </Routes>
         </main>
       </div>
     </Router>
+
   );
 }
 

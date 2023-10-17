@@ -61,7 +61,7 @@ const UploadPhoto = () => {
     formData.append('tags', JSON.stringify(tags));
 
     try {
-      const response = await fetch(process.env.REACT_APP_BACK_END_URL, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/upload_photo_mongo`, {
         method: 'POST',
         body: formData,
       });

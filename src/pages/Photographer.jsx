@@ -34,11 +34,11 @@ function Photographer() {
           <div style={{ padding: '20px', marginTop: '60px',width:'100%' }}>
     <Profile photoGrapherName={name}/>
      {/* Inner div with padding and margin */}
-          <PhotoGrid photos={photos}  />
-          <PhotoGrid photos={photos}  />
           <PhotoGrid photos={photos} />
           <PhotoGrid photos={photos} />
-          <PhotoGrid photos={photos}  />
+          <PhotoGrid photos={photos} />
+          <PhotoGrid photos={photos} />
+          <PhotoGrid photos={photos} />
         
       </div>
     </div>
