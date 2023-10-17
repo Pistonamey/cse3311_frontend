@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
 // Import individual page components
@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
 import jwt_decode from 'jwt-decode';
 import MenuSidebar from './components/MenuSidebar';
+import UploadPhoto from './pages/UploadPhoto';
 
 // Define the main App component
 function App() {
@@ -50,8 +51,8 @@ function App() {
   return (
     <Router>
       <div className="app">
-        {/* Conditionally render the MenuSidebar */}
-        {!isLoginPage && !isRegisterPage && <MenuSidebar />}
+        {/* Conditionally render the MenuSidebar only if the user is authenticated */}
+        {isAuthenticated && !isLoginPage && !isRegisterPage && <MenuSidebar />}
         <main className="content">
           {/* Wrap the entire app inside the Router component to enable routing */}
           {/* Define routes for the app */}
@@ -70,6 +71,19 @@ function App() {
                   element={<Home />}
                   isAuthenticated={isAuthenticated}
                 />
+              }
+            />
+            <Route
+              path="/upload-photo"
+              element={
+                isAuthenticated ? (
+                  <PrivateRoute
+                    element={<UploadPhoto />}
+                    isAuthenticated={isAuthenticated}
+                  />
+                ) : (
+                  <Navigate to="/" replace />
+                )
               }
             />
             {/* Photographer profile page (with dynamic "name" parameter) */}

@@ -13,7 +13,6 @@ const photos = [
   { id: 3, url: '/data/photos/photo3.jpg', alt: 'Photo 3' },
   { id: 4, url: '/data/photos/photo4.jpg', alt: 'Photo 4' },
   { id: 5, url: '/data/photos/photo5.jpg', alt: 'Photo 5' },
-  { id: 6, url: '/data/photos/photo3.jpg', alt: 'Photo 5' },
 ];
 
 // Define the Home component
