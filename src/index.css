@@ -31,25 +31,3 @@ body,
 ::-webkit-scrollbar-track:hover{
   background:#555;
 }
-
-/* Change the color of today's date cell in react-big-calendar */
-.rbc-day-bg.rbc-today {
-  color: black; /* Change to your desired text color for today's date */
-}
-
-/* Change the color of normal date cells */
-.rbc-day-bg {
-  background-color: transparent; /* Change to your desired background color for normal dates */
-  color: transparent; /* Change to your desired text color for normal dates */
-  border: 1px solid transparent; /* Border for normal dates */
-}
-
-/* Additional custom styles can be added as needed */
-/* Style for highlighted events (today's date) */
-.highlighted-event {
-  border: 2px solid red; /* Customize the circle color and size here */
-  border-radius: 50%;
-  padding: 5px; /* Adjust the padding as needed */
-  text-align: center;
-}
-

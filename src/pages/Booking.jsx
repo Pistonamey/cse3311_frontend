@@ -5,7 +5,7 @@ import TopBar from '../components/TopBar';
 import { useParams } from 'react-router-dom';
 import Profile from '../components/Profile';
 import moment from 'moment';
-import './index.css'; // Import the CSS file for custom styles
+import './Booking.css';
 
 const localizer = momentLocalizer(moment);
 
