@@ -7,7 +7,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import { CalendarMonthSharp } from '@mui/icons-material';
 
 // Define the Profile functional component that accepts photoGrapherName as a prop
-function Profile({photoGrapherName}) {
+function Profile({photoGrapherName, mode}) {
   return (
     // Container div for the profile
     <div style={{ display: 'flex', marginBottom: '20px', alignItems: 'center' }}>
@@ -47,9 +47,14 @@ function Profile({photoGrapherName}) {
           </a>
           
           {/* Booking Link with a calendar icon */}
+          {(mode === 'booking') ? 
+          (<Link to={`/photographer/${photoGrapherName}`} style={{ color: '#FFF', textDecoration: 'none' }}>
+              Profile
+            </Link>
+          ) : (
           <Link to={`/photographer/${photoGrapherName}/Booking`} style={{ color: '#FFF', textDecoration: 'none' }}>
-            Booking: <CalendarMonthSharp style={{ color: 'white' }}/>
-          </Link>
+              Booking: <CalendarMonthSharp style={{ color: 'white' }}/>
+          </Link>)}
         </div>
       </div>
     </div>
