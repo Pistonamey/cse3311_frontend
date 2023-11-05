@@ -112,7 +112,7 @@ const Calendar3 = props => {
               <button
                 key={time}
                 className="k-button k-mb-4"
-                onClick={e => setSelectedTimeSlot(time)}
+
               >
                 {time}
               </button>
