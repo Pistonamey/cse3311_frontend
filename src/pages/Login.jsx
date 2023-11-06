@@ -1,78 +1,68 @@
-// Import necessary dependencies from the MUI library
 import React, { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import GoogleIcon from '@mui/icons-material/Google';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useNavigate, useLocation } from 'react-router-dom'; // Updated import
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useCookies } from 'react-cookie';
 
-// Define a Copyright component that displays a copyright statement
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/home">
-        PixEra
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// Create a default theme using MUI's createTheme function
 const defaultTheme = createTheme();
 
-// Define the main Login component
 export default function Login() {
-  // Sample logo data (you might get this from a prop or API call in a real-world scenario)
   const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' };
-  const navigate = useNavigate(); // Updated usage
+  const navigate = useNavigate();
   const location = useLocation();
-  
-  // Function to store the token in local storage
-  const storeTokenInLocalStorage = (token) => {
-    localStorage.setItem('jwtToken', token);
-  };
 
-  // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
-  };
+    };
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    console.log("triggered"+token)
-    if (token) {
-      // Store the token in local storage
-      storeTokenInLocalStorage(token);
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Redirect to /home using navigate
-      navigate(`/home`); // Updated navigation
+      if (response.status === 200) {
+          // Store the cookie value in a variable
+          const responseData = await response.json()
+          let token = responseData['token']
+          document.cookie = `session=${token}`
+
+          if(token) {
+            console.log(document.cookie)
+            //window.location.href = `/verify2FA/${formData.email}`;
+          }
+        } else if (response.status === 404) {
+        alert('Go through signup to add a password');
+        window.location.href = '/signup';
+      } else {
+        alert('Please check email or password');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-  }, [location, navigate]);
+  };
 
   const handleGoogleLogin = () => {
-    // Redirect the user to the backend for Google authentication
-    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login_user`;
+    window.location.href = `/login_user`;
   };
 
-  // Render the login component
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -90,7 +80,6 @@ export default function Login() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            {/* Email input field */}
             <TextField
               margin="normal"
               required
@@ -101,7 +90,6 @@ export default function Login() {
               autoComplete="email"
               autoFocus
             />
-            {/* Password input field */}
             <TextField
               margin="normal"
               required
@@ -112,12 +100,6 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
-            {/* Remember me checkbox */}
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            {/* Submit button */}
             <Button
               type="submit"
               fullWidth
@@ -127,7 +109,6 @@ export default function Login() {
               Sign In
             </Button>
             <Typography sx={{ textAlign: 'center' }}>OR</Typography>
-            {/* Google sign in button */}
             <Button
               component="label"
               variant="contained"
@@ -139,23 +120,19 @@ export default function Login() {
               Sign In with Google
             </Button>
             <Grid container>
-              {/* Forgot password link */}
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/forgot_password" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
-              {/* Sign Up link */}
               <Grid item>
-                <Link href="/register" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        {/* Display the Copyright component */}
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

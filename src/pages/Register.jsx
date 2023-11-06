@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,39 +14,58 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/home">
-        PixEra
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+function Register() {
+  const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' };
+  const google_logo = { url: '/data/photos/google_logo.png' };
+  const [selectedRole, setSelectedRole] = React.useState('');
+  const [formData, setFormData] = React.useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
-export default function Register() {
-const logo={ id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
-const google_logo={url:'/data/photos/google_logo.png'}
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-      firstname:data.get('firstName'),
-      lastname:data.get('lastName')
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
   };
 
+  const handleSubmit = () => {
+    fetch(`/signup_user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formData,
+        role: selectedRole,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Sign-up successful');
+          window.location.href = '/resend2FA';
+        } else {
+          console.error('Sign-up failed');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    // Redirect the user to the backend for Google authentication
+    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login_user`;
+  };
+
+  const isSignUpButtonDisabled = !selectedRole; // Determine if the "Sign Up" button should be disabled
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={createTheme()}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -56,7 +76,7 @@ const google_logo={url:'/data/photos/google_logo.png'}
             alignItems: 'center',
           }}
         >
-          <img src={logo.url} alt="" width="140px" height="140px"/>
+          <img src={logo.url} alt="" width="140px" height="140px" />
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -71,6 +91,8 @@ const google_logo={url:'/data/photos/google_logo.png'}
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value={formData.firstName}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -81,6 +103,8 @@ const google_logo={url:'/data/photos/google_logo.png'}
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -91,17 +115,8 @@ const google_logo={url:'/data/photos/google_logo.png'}
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="address"
-                  label="Address"
-              
-                  id="Address"
-                  autoComplete="new-address"
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,40 +128,64 @@ const google_logo={url:'/data/photos/google_logo.png'}
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
               </Grid>
-              
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+                <RadioGroup
+                  aria-label="role"
+                  name="role"
+                  value={selectedRole}
+                  onChange={(event) => setSelectedRole(event.target.value)}
+                >
+                  <FormControlLabel
+                    value="Customer"
+                    control={<Radio />}
+                    label="Customer"
+                  />
+                  <FormControlLabel
+                    value="Photographer"
+                    control={<Radio />}
+                    label="Photographer"
+                  />
+                </RadioGroup>
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2,bgcolor:"black", }}
+              sx={{ mt: 3, mb: 2, bgcolor: "black" }}
+              disabled={isSignUpButtonDisabled} // Disable the "Sign Up" button if no role is selected
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
-            <Typography sx={{textAlign:"center"}}>OR</Typography>
-            <Button component="label" variant="contained" startIcon={<GoogleIcon />} sx={{mt: 2, mb: 2}}fullWidth>
-            Sign Up with Google
+            <Typography sx={{ textAlign: "center" }}>OR</Typography>
+            {/* Google sign-in button */}
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<GoogleIcon />}
+              sx={{ mt: 2, mb: 2 }}
+              fullWidth
+              onClick={handleGoogleLogin}
+            >
+              Sign In with Google
             </Button>
-            
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link href="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
 }
+
+export default Register;

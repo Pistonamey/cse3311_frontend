@@ -18,26 +18,9 @@ const photos = [
 // Define the Home component
 function Home() {
   const location = useLocation();
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const token = params.get('token');
-  //   console.log(token)
-  //   if(token){
-  //     console.log("inhere")
-  //     setIsAuthenticated(true)
-  //   }
-  //   else{
-  //     console.log("came to false")
-  //     setIsAuthenticated(false)
-  //   }// Set isAuthenticated to true if token exists
-    
-  // }, [location]);
   
   return (
     <>
-    
       <TopBar />
       <div style={{
         backgroundColor: '#2C2C2C',
@@ -58,7 +41,6 @@ function Home() {
         </div>
       </div>
     </>
-      
   );
 }
 

@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
-
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
-  
+
   return (
     <Link to={to} style={{ textDecoration: 'none' }}>
       <MenuItem
@@ -28,9 +27,20 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const MenuSidebar = () => {
   const theme = useTheme();
-  
+  const location = useLocation();
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
+  // Define an array of paths where the sidebar should be hidden
+  const hiddenPaths = ["/signup", "/", "/forgot_password"];
+
+  // Check if the current location is in the hidden paths
+  const isHidden = hiddenPaths.includes(location.pathname);
+
+  if (isHidden) {
+    return null; // Return null to hide the sidebar
+  }
 
   return (
     <Box
@@ -50,7 +60,7 @@ const MenuSidebar = () => {
         "& .pro-menu-item.active": {
           color: "#6870fa !important",
         },
-        marginTop:"60px"
+        marginTop: "60px"
       }}
     >
       <Sidebar collapsed={isCollapsed}>
@@ -72,7 +82,7 @@ const MenuSidebar = () => {
                 ml="15px"
               >
                 <Typography variant="subtitle3" color="black">
-                 PixEra
+                  PixEra
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -92,7 +102,7 @@ const MenuSidebar = () => {
                 >
                   Amey Shinde
                 </Typography>
-                
+
               </Box>
             </Box>
           )}
@@ -112,7 +122,7 @@ const MenuSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            
+
           </Box>
         </Menu>
       </Sidebar>
