@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
+import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode';
 
 const UploadPhoto = () => {
   const [file, setFile] = useState(null);
@@ -17,6 +19,9 @@ const UploadPhoto = () => {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const token = Cookies.get('session')
+  const decoded = jwtDecode(token)
+  const email = decoded['gmail']
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -55,18 +60,18 @@ const UploadPhoto = () => {
     }
 
     const formData = new FormData();
-    formData.append('photo', file);
+    formData.append('file', file);
     formData.append('title', title);
     formData.append('description', description);
     formData.append('tags', JSON.stringify(tags));
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/upload_photo_mongo`, {
+      const response = await fetch(`/upload/${email}`, {
         method: 'POST',
         body: formData,
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert('File uploaded successfully.');
         // Clear the form fields and the selected file
         setFile(null);
@@ -74,8 +79,12 @@ const UploadPhoto = () => {
         setDescription('');
         setTags([]);
         setTagInput('');
-      } else {
-        alert('Failed to upload file.');
+      } else if (response.status === 404) {
+        alert('idk');
+      } else if (response.status === 400) {
+        alert("Invalid file type")
+      } else if (response.status === 403) {
+        alert('Enter a title')
       }
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -138,26 +147,26 @@ const UploadPhoto = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                  <TextField
-  fullWidth
-  label="Tags"
-  variant="outlined"
-  value={tagInput}
-  onChange={handleTagInputChange}
-  onKeyPress={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleTagInputKeyPress(e);
-    }
-  }}
-  InputProps={{
-    startAdornment: (
-      <span onClick={addTag} style={{ cursor: 'pointer' }}>
-        #
-      </span>
-    ),
-  }}
-/>
+                    <TextField
+                      fullWidth
+                      label="Tags"
+                      variant="outlined"
+                      value={tagInput}
+                      onChange={handleTagInputChange}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleTagInputKeyPress(e);
+                        }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <span onClick={addTag} style={{ cursor: 'pointer' }}>
+                            #
+                          </span>
+                        ),
+                      }}
+                    />
                   </Grid>
                   {tags.map((tag) => (
                     <Grid item key={tag} xs={3}>
@@ -169,7 +178,6 @@ const UploadPhoto = () => {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           padding: '4px 8px',
-                          width:"25px"
                         }}
                       >
                         {tag}
@@ -177,7 +185,7 @@ const UploadPhoto = () => {
                           onClick={() => removeTag(tag)}
                           style={{ cursor: 'pointer' }}
                         >
-                          <CloseIcon/>
+                          <CloseIcon />
                         </span>
                       </Paper>
                     </Grid>

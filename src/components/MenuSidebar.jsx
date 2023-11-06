@@ -3,18 +3,20 @@ import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
 
   return (
-    <Link to={to} style={{ textDecoration: 'none' }}>
+    <Link to={to} style={{ textDecoration: "none" }}>
       <MenuItem
         active={selected === title}
         style={{
-          color: "black"
+          color: "black",
         }}
         onClick={() => setSelected(title)}
         icon={icon}
@@ -28,6 +30,10 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const MenuSidebar = () => {
   const theme = useTheme();
   const location = useLocation();
+  const token = Cookies.get('session')
+  const decoded = jwtDecode(token)
+  const email = decoded['gmail']
+  //const username = decoded['username']
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
@@ -60,7 +66,7 @@ const MenuSidebar = () => {
         "& .pro-menu-item.active": {
           color: "#6870fa !important",
         },
-        marginTop: "60px"
+        marginTop: "60px",
       }}
     >
       <Sidebar collapsed={isCollapsed}>
@@ -100,9 +106,11 @@ const MenuSidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Amey Shinde
+                  Suhaib Hasan
                 </Typography>
-
+                <Typography variant="subtitle2" color="black">
+                  {email}
+                </Typography>
               </Box>
             </Box>
           )}
@@ -117,12 +125,11 @@ const MenuSidebar = () => {
             />
             <Item
               title="Upload Photo"
-              to="/upload-photo"
+              to={`/upload_photo/${email}`}
               icon={<UploadFileIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
           </Box>
         </Menu>
       </Sidebar>

@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useCookies } from 'react-cookie';
 
 const defaultTheme = createTheme();
 
@@ -49,8 +48,8 @@ export default function Login() {
             //window.location.href = `/verify2FA/${formData.email}`;
           }
         } else if (response.status === 404) {
-        alert('Go through signup to add a password');
-        window.location.href = '/signup';
+        alert('Go through forgot password to add a password');
+        window.location.href = '/forgot_password';
       } else {
         alert('Please check email or password');
       }

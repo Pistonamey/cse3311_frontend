@@ -17,7 +17,6 @@ import Reset_Password from './pages/Reset_password';
 import Verify2FA from './pages/Verify2FA';
 import Verify2FA_signup from './pages/Verify2FA_signup'
 import Cookies from 'js-cookie'
-import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 // Define the main App component
 function App() {
@@ -30,9 +29,6 @@ function App() {
 
   const token2 = Cookies.get('session')
   console.log(token2)
-
-  const token3 = read_cookie('session')
-  console.log(token3)
 
   if (token) {
     try {
@@ -87,7 +83,7 @@ function App() {
               }
             />
             <Route
-              path="/upload-photo"
+              path="/upload_photo/:email"
               element={
                 isAuthenticated ? (
                   <PrivateRoute
