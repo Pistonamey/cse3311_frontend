@@ -42,6 +42,7 @@ export default function Login() {
           const responseData = await response.json()
           let token = responseData['token']
           document.cookie = `session=${token}`
+          console.log(token)
 
           if(token) {
             console.log(document.cookie)

@@ -16,6 +16,7 @@ import Forgot_Password from './pages/Forgot_Password';
 import Reset_Password from './pages/Reset_password';
 import Verify2FA from './pages/Verify2FA';
 import Verify2FA_signup from './pages/Verify2FA_signup'
+import Google_OAuth from './pages/Google_OAuth';
 import Cookies from 'js-cookie'
 
 // Define the main App component
@@ -23,12 +24,8 @@ function App() {
   let isAuthenticated = false;
 
   // Check if the JWT token is present in localStorage and is valid
-  const token = document.cookie.split('; ')
-    .find((v) => v.split('=')[0] === 'session')
-    ?.slice('session='.length)
-
-  const token2 = Cookies.get('session')
-  console.log(token2)
+  const token = Cookies.get('session')
+  console.log(token)
 
   if (token) {
     try {
@@ -95,6 +92,7 @@ function App() {
                 )
               }
             />
+            <Route path="/google_oauth/:email" element={<Google_OAuth/>}/>
             <Route
               path="/verify2FA/:email"
               element={<Verify2FA />}

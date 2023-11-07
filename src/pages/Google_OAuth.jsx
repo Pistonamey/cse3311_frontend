@@ -13,8 +13,14 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 function Google_OAuth() {
+    const token = Cookies.get('session')
+  const decoded = jwtDecode(token)
+  const email = decoded['gmail']
+  const exp = decoded['exp']
   const [selectedRole, setSelectedRole] = React.useState('');
   const [formData, setFormData] = React.useState({
     username: '',
@@ -31,8 +37,44 @@ function Google_OAuth() {
     });
   };
 
-  const handleSubmit = () => {
-    // Your form submission logic here
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const formData = {
+      username: data.get('username'),
+      country: data.get('country'),
+      city: data.get('city'),
+      role: selectedRole,
+    };
+
+    try {
+      const response = await fetch(`/google_oauth/${email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.status === 200) {
+          const responseData = await response.json()
+          let token = responseData['token']
+          document.cookie = `session=${token}`
+
+          if(token) {
+            console.log(document.cookie)
+            //window.location.href = `/verify2FA/${formData.email}`;
+          }
+        } else if (response.status === 404) {
+        alert('Go through forgot password to add a password');
+        window.location.href = '/forgot_password';
+      } else {
+        alert('Please check email or password');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const isSignUpButtonDisabled = !selectedRole; // Determine if the "Sign Up" button should be disabled
@@ -118,25 +160,6 @@ function Google_OAuth() {
             >
               Sign Up
             </Button>
-            <Typography sx={{ textAlign: "center" }}>OR</Typography>
-            {/* Google sign-in button */}
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<GoogleIcon />}
-              sx={{ mt: 2, mb: 2 }}
-              fullWidth
-              onClick={handleGoogleLogin} // Define your Google OAuth login function
-            >
-              Sign In with Google
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>
