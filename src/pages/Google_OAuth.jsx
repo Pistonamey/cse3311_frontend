@@ -14,15 +14,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function Register() {
-  const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' };
-  const google_logo = { url: '/data/photos/google_logo.png' };
+function Google_OAuth() {
   const [selectedRole, setSelectedRole] = React.useState('');
   const [formData, setFormData] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    username: '',
+    country: '',
+    city: '',
+    role: '',
   });
 
   const handleInputChange = (event) => {
@@ -34,32 +32,7 @@ function Register() {
   };
 
   const handleSubmit = () => {
-    fetch(`/signup_user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...formData,
-        role: selectedRole,
-      }),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('Sign-up successful');
-          window.location.href = '/resend2FA';
-        } else {
-          console.error('Sign-up failed');
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  };
-
-  const handleGoogleLogin = () => {
-    // Redirect the user to the backend for Google authentication
-    window.location.href = `${process.env.REACT_APP_BACK_END_URL}/login_user`;
+    // Your form submission logic here
   };
 
   const isSignUpButtonDisabled = !selectedRole; // Determine if the "Sign Up" button should be disabled
@@ -76,34 +49,20 @@ function Register() {
             alignItems: 'center',
           }}
         >
-          <img src={logo.url} alt="" width="140px" height="140px" />
           <Typography component="h1" variant="h5">
-            Sign up
+            Google OAuth
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  value={formData.lastName}
+                  name="username"
+                  label="Username"
+                  id="username"
+                  autoComplete="username"
+                  value={formData.username}
                   onChange={handleInputChange}
                 />
               </Grid>
@@ -111,11 +70,10 @@ function Register() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={formData.email}
+                  name="country"
+                  label="Country"
+                  id="country"
+                  value={formData.country}
                   onChange={handleInputChange}
                 />
               </Grid>
@@ -123,12 +81,10 @@ function Register() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={formData.password}
+                  name="city"
+                  label="City"
+                  id="city"
+                  value={formData.city}
                   onChange={handleInputChange}
                 />
               </Grid>
@@ -170,7 +126,7 @@ function Register() {
               startIcon={<GoogleIcon />}
               sx={{ mt: 2, mb: 2 }}
               fullWidth
-              onClick={handleGoogleLogin}
+              onClick={handleGoogleLogin} // Define your Google OAuth login function
             >
               Sign In with Google
             </Button>
@@ -188,4 +144,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Google_OAuth;
