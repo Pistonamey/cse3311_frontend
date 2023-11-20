@@ -43,6 +43,8 @@ function ForgotPasswordForm() {
             }
             else if (resp.status === 200) {
                 alert("check your email")
+            } else {
+                alert("This didn't work")
             }
         })
 };

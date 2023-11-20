@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Photographer from './pages/Photographer';
 import Booking from './pages/Booking';
-import Commenting from './pages/Commenting';
 
 // Import individual page components
 import Login from './pages/Login';
@@ -15,17 +14,18 @@ import UploadPhoto from './pages/UploadPhoto';
 import Forgot_Password from './pages/Forgot_Password';
 import Reset_Password from './pages/Reset_password';
 import Verify2FA from './pages/Verify2FA';
-import Verify2FA_signup from './pages/Verify2FA_signup'
 import Google_OAuth from './pages/Google_OAuth';
-import Cookies from 'js-cookie'
+import Profile from './components/Profile';
+import Commenting from './pages/Commenting';
+import User_Profile from './pages/User_Profile';
+import Cookies from 'js-cookie';
 
 // Define the main App component
 function App() {
   let isAuthenticated = false;
 
   // Check if the JWT token is present in localStorage and is valid
-  const token = Cookies.get('session')
-  console.log(token)
+  const token = Cookies.get('token')
 
   if (token) {
     try {
@@ -36,12 +36,14 @@ function App() {
         isAuthenticated = true;
       } else {
         // Token has expired, log the user out
-        isAuthenticated = false;
+        //isAuthenticated = false;
+        isAuthenticated = false
         localStorage.removeItem('jwtToken');
       }
     } catch (error) {
       // Token is invalid, log the user out
-      isAuthenticated = false;
+      //isAuthenticated = false;
+      isAuthenticated = false
       localStorage.removeItem('jwtToken');
     }
   }
@@ -80,7 +82,28 @@ function App() {
               }
             />
             <Route
-              path="/upload_photo/:email"
+              path="/user_profile"
+              element={
+                <PrivateRoute
+                  element={<User_Profile />}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="/list"
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute
+                  element={<Profile />}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="/upload_photo"
               element={
                 isAuthenticated ? (
                   <PrivateRoute
@@ -94,12 +117,8 @@ function App() {
             />
             <Route path="/google_oauth/:email" element={<Google_OAuth/>}/>
             <Route
-              path="/verify2FA/:email"
+              path="/verify2FA"
               element={<Verify2FA />}
-            />
-            <Route
-              path="/verify2FA_signup/:email"
-              element={<Verify2FA_signup />}
             />
             <Route
               path="/reset_password/:token"
@@ -123,9 +142,25 @@ function App() {
               element={<Forgot_Password/>}
             />
             {/* Photographer profile page (with dynamic "name" parameter) */}
-            <Route path="/photographer/:name" element={<Photographer />} />
+            <Route
+              path="/photographer/:name"
+              element={
+                <PrivateRoute
+                  element={<Photographer />}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
             {/* Booking page under a specific photographer (with dynamic "name" parameter) */}
-            <Route path="/photographer/:name/Booking" element={<Booking />} />
+            <Route
+              path="/photographer/:name/Booking"
+              element={
+                <PrivateRoute
+                  element={<Booking />}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
             <Route path="/photographer/:name/:photoid" element={<Commenting />} />
             {/* You can add more routes here as your app grows */}
           </Routes>

@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useParams } from "react-router-dom";
+import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode';
 
 function Copyright(props) {
   return (
@@ -21,13 +23,15 @@ function Copyright(props) {
 }
 
 function Verify2FA() {
-    const { email } = useParams()
   const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationResult, setVerificationResult] = useState(null);
+  const token = Cookies.get('token')
+  const decode = jwtDecode(token)
+  const email = decode['email']
 
   const handleVerification = async () => {
-    const response = await fetch(`/verify_2fa/${email}`, {
+    const response = await fetch(`/verify_2fa/${decode['email']}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

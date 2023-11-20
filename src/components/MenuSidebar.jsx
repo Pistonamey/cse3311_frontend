@@ -5,8 +5,11 @@ import { Link, useLocation } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
+
+import '../index.css'
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -30,22 +33,26 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const MenuSidebar = () => {
   const theme = useTheme();
   const location = useLocation();
-  const token = Cookies.get('session')
+  const token = Cookies.get('token')
   const decoded = jwtDecode(token)
-  const email = decoded['gmail']
-  //const username = decoded['username']
+  const email = decoded['email']
+  const firstName = decoded['firstName']
+  const role = decoded['role']
+
+  const handleLogout = () => {
+    Cookies.remove('token')
+    Cookies.remove('session')
+    window.location.href='/'
+  };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
 
-  // Define an array of paths where the sidebar should be hidden
-  const hiddenPaths = ["/signup", "/", "/forgot_password"];
-
-  // Check if the current location is in the hidden paths
+  const hiddenPaths = ["/signup", "/", "/forgot_password", "/reset_password/:token", "/verify2FA"];
   const isHidden = hiddenPaths.includes(location.pathname);
 
   if (isHidden) {
-    return null; // Return null to hide the sidebar
+    return null;
   }
 
   return (
@@ -71,7 +78,6 @@ const MenuSidebar = () => {
     >
       <Sidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -106,7 +112,7 @@ const MenuSidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Suhaib Hasan
+                  {firstName}
                 </Typography>
                 <Typography variant="subtitle2" color="black">
                   {email}
@@ -123,13 +129,28 @@ const MenuSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Upload Photo"
-              to={`/upload_photo/${email}`}
-              icon={<UploadFileIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {role === 'Photographer' && (
+              <Item
+                title="Upload Photo"
+                to={`/upload_photo`}
+                icon={<UploadFileIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {/* Logout Button */}
+          <Link to="/" style={{ textDecoration: "none", bottom: -100 }}>
+            <MenuItem
+              style={{
+                color: "black",
+                left: isCollapsed ? "10px" : "unset",
+              }}
+              onClick={handleLogout}
+              icon={<ExitToAppOutlinedIcon />}
+            >
+              <Typography>Logout</Typography>
+            </MenuItem>
+          </Link>
           </Box>
         </Menu>
       </Sidebar>

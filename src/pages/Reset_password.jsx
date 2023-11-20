@@ -81,13 +81,6 @@ function ResetPassword() {
                     </Button>
                     {errorMessage && <Typography variant="body2" color="error">{errorMessage}</Typography>}
                 </form>
-                <Grid container justifyContent="flex-end">
-                    <Grid item>
-                        <Link href="/" variant="body2">
-                            Remember your password? Sign in
-                        </Link>
-                    </Grid>
-                </Grid>
             </div>
             <Copyright sx={{ mt: 5 }} />
         </Container>

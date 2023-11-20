@@ -19,9 +19,9 @@ const UploadPhoto = () => {
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
-  const token = Cookies.get('session')
+  const token = Cookies.get('token')
   const decoded = jwtDecode(token)
-  const email = decoded['gmail']
+  const username = decoded['username']
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -64,27 +64,34 @@ const UploadPhoto = () => {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('tags', JSON.stringify(tags));
+    formData.append('username', username)
 
     try {
-      const response = await fetch(`/upload/${email}`, {
+      const response = await fetch(`/upload`, {
         method: 'POST',
         body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
-      if (response.status === 200) {
+      if (response.ok) {
         alert('File uploaded successfully.');
-        // Clear the form fields and the selected file
         setFile(null);
         setTitle('');
         setDescription('');
         setTags([]);
         setTagInput('');
-      } else if (response.status === 404) {
-        alert('idk');
       } else if (response.status === 400) {
-        alert("Invalid file type")
+        alert('Invalid file type');
       } else if (response.status === 403) {
-        alert('Enter a title')
+        alert('Enter a title');
+      } else if (response.status === 401) {
+        alert('Unauthorized. Please log in.');
+      } else if (response.status === 409) {
+        alert('This title already exists')
+      } else {
+        alert('File upload failed:', response.statusText);
       }
     } catch (error) {
       console.error('Error uploading file:', error);

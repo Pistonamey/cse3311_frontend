@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Cookies from 'js-cookie'
 
 const defaultTheme = createTheme();
 
@@ -37,18 +38,20 @@ export default function Login() {
         body: JSON.stringify(formData),
       });
 
+      // Check if the response status is 200
       if (response.status === 200) {
-          // Store the cookie value in a variable
-          const responseData = await response.json()
-          let token = responseData['token']
-          document.cookie = `session=${token}`
-          console.log(token)
+        // Get the 'Authorization' header from the response
+        const jwtToken = response.headers.get('Authorization');
+        const token = jwtToken.split(' ')[1]
+        // const customHeaders = new Headers();
+        // customHeaders.append('Authorization', `Bearer ${token}`);
 
-          if(token) {
-            console.log(document.cookie)
-            //window.location.href = `/verify2FA/${formData.email}`;
-          }
-        } else if (response.status === 404) {
+        if (jwtToken) {
+          // Set the JWT token as a cookie
+          Cookies.set('token', token, { expires: 1 / 24 }); // Expires in 1 hour
+          window.location.href = `/verify2FA`;
+        }
+      } else if (response.status === 404) {
         alert('Go through forgot password to add a password');
         window.location.href = '/forgot_password';
       } else {
