@@ -2,13 +2,18 @@ import React, { useState, useEffect } from 'react';
 import TopBar from '../components/TopBar';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import { CalendarMonthSharp } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 function User_Profile() {
+  // Get user information from the token
   const token = Cookies.get('token');
   const decoded = jwtDecode(token);
   const username = decoded['username'];
   const isPhotographer = decoded['role'];
-  const S3_BUCKET = "pixera";
 
   // State to manage the profile image
   const [profileImage, setProfileImage] = useState(null);
@@ -30,7 +35,7 @@ function User_Profile() {
         body: JSON.stringify({ username }),
       });
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setPhotoList(data); // Update the state with the correct property
     } catch (error) {
       console.error('Error fetching photo list:', error);
@@ -57,20 +62,65 @@ function User_Profile() {
   return (
     <>
       <TopBar />
-      <div style={{ padding: '20px', marginTop: '60px' }}>
-        <h1>Welcome, {username}!</h1>
+      <div
+        style={{
+          padding: '20px',
+          marginTop: '60px',
+          background: '#f0f0f0', // Set the background color to grey
+        }}
+      >
+        {/* Profile Section */}
+        <div style={{ display: 'flex', marginBottom: '20px', alignItems: 'center' }}>
+          {/* Display the profile image */}
+          <img
+            src={editingImage}
+            alt="Profile"
+            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }}
+          />
 
+          {/* Container for photographer's name, title, and social media icons */}
+          <div style={{ marginLeft: '20px' }}>
+            {/* Display the photographer's name */}
+            <h2>{username}</h2>
+            {/* Display the title or description (Modify this part according to your logic) */}
+            <p>Title or Description</p>
+
+            {/* Container for social media icons and booking link */}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {/* LinkedIn Icon linking to LinkedIn */}
+              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+                <LinkedInIcon style={{ color: '#0e76a8' }} />
+              </a>
+              {/* Instagram Icon linking to Instagram */}
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                <InstagramIcon style={{ color: '#C13584' }} />
+              </a>
+              {/* Twitter Icon linking to Twitter */}
+              <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+                <TwitterIcon style={{ color: '#1DA1F2' }} />
+              </a>
+              {/* Booking Link with a calendar icon (Modify the Link according to your routing logic) */}
+              <Link
+                to={`/photographer/${username}/Booking`}
+                style={{ color: '#FFF', textDecoration: 'none' }}
+              >
+                Booking: <CalendarMonthSharp style={{ color: 'white' }} />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Photo Section */}
         {isPhotographer === 'Photographer' && (
-          // Render photo section for photographers
           <div>
             <h2>Your Photos</h2>
             {photoList.length > 0 ? (
               photoList.map((photo, index) => (
                 <img
                   key={index}
-                  src={`${photo}`}
+                  src={photo}
                   alt={`Photo ${index}`}
-                  style={{ width: '100px', height: '100px', margin: '5px' }}
+                  style={{ width: '200px', height: '200px', margin: '20px' }}
                 />
               ))
             ) : (
@@ -79,16 +129,11 @@ function User_Profile() {
           </div>
         )}
 
-        {editingImage ? (
-          // Render image editing form when editingImage is true
+        {/* Image Editing Section */}
+        {editingImage && (
           <div>
             <input type="file" onChange={handleImageChange} />
             <button onClick={handleSaveImage}>Save</button>
-          </div>
-        ) : (
-          // Render the profile image and edit button when not editing
-          <div>
-            <button onClick={handleEditImage}>Edit Image</button>
           </div>
         )}
       </div>
