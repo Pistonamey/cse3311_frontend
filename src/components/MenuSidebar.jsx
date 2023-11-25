@@ -41,14 +41,13 @@ const MenuSidebar = () => {
 
   const handleLogout = () => {
     Cookies.remove('token')
-    Cookies.remove('session')
     window.location.href='/'
   };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
 
-  const hiddenPaths = ["/signup", "/", "/forgot_password", "/reset_password/:token", "/verify2FA"];
+  const hiddenPaths = ["/signup", "/", "/forgot_password", "/reset_password/:token", "/verify2FA", "/google_oauth"];
   const isHidden = hiddenPaths.includes(location.pathname);
 
   if (isHidden) {

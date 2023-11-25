@@ -115,7 +115,7 @@ function App() {
                 )
               }
             />
-            <Route path="/google_oauth/:email" element={<Google_OAuth/>}/>
+            <Route path="/google_oauth" element={<Google_OAuth/>}/>
             <Route
               path="/verify2FA"
               element={<Verify2FA />}

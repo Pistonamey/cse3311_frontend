@@ -57,8 +57,6 @@ function Register() {
     handleInputChange(event);
   };
 
-  console.log(selectedRole)
-
   const isFormValid = () => {
     return (
       formData.firstName &&

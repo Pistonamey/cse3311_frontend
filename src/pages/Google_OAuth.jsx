@@ -17,16 +17,18 @@ import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
 function Google_OAuth() {
-    const token = Cookies.get('session')
-  const decoded = jwtDecode(token)
-  const email = decoded['gmail']
-  const exp = decoded['exp']
+  const token = Cookies.get('token');
+  const decoded = jwtDecode(token);
+  const email = decoded['email'];
+  const exp = decoded['exp'];
   const [selectedRole, setSelectedRole] = React.useState('');
   const [formData, setFormData] = React.useState({
     username: '',
     country: '',
     city: '',
     role: '',
+    firstName: '',
+    lastName: '',
   });
 
   const handleInputChange = (event) => {
@@ -39,38 +41,35 @@ function Google_OAuth() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
-    const formData = {
-      username: data.get('username'),
-      country: data.get('country'),
-      city: data.get('city'),
-      role: selectedRole,
-    };
+    // Create a new FormData object
+    const formDataObject = new FormData();
+
+    // Append form data to the FormData object
+    formDataObject.append('username', formData.username);
+    formDataObject.append('country', formData.country);
+    formDataObject.append('city', formData.city);
+    formDataObject.append('role', selectedRole);
+    formDataObject.append('firstName', formData.firstName);
+    formDataObject.append('lastName', formData.lastName);
 
     try {
-      const response = await fetch(`/google_oauth/${email}`, {
+      const response = await fetch(`/google_oauth`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: formDataObject, // Pass the FormData object directly as the body
       });
 
-      if (response.status === 200) {
-          const responseData = await response.json()
-          let token = responseData['token']
-          document.cookie = `session=${token}`
-
-          if(token) {
-            console.log(document.cookie)
-            //window.location.href = `/verify2FA/${formData.email}`;
-          }
-        } else if (response.status === 404) {
-        alert('Go through forgot password to add a password');
-        window.location.href = '/forgot_password';
+      if (response.ok) {
+        const Token = response.headers.get('Authorization');
+        const newToken = Token.split(' ')[1]
+        Cookies.remove('token')
+        Cookies.set('token', newToken, { expires: 1 / 24 }); // Expires in 1 hour
+        window.location.href = '/home'
       } else {
-        alert('Please check email or password');
+        console.error('Failed to save edited data');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -96,6 +95,30 @@ function Google_OAuth() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="firstName"
+                  label="firstName"
+                  id="firstName"
+                  autoComplete="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="lastName"
+                  label="lastName"
+                  id="lastName"
+                  autoComplete="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
