@@ -13,14 +13,71 @@ import {
   Grid,
 } from '@mui/material';
 import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuSidebar from '../components/MenuSidebar';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
+import { Link } from 'react-router-dom';
 
 // Define the Home component
 function Home() {
-  const token = Cookies.get('token')
+  const [photoList, setPhotoList] = useState([]);
+  const [allphotoList, setAllPhotoList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  const token = Cookies.get('token');
+  const decoded = jwtDecode(token);
+  const username = decoded['username'];
+
+  useEffect(() => {
+    fetchPhotoList();
+    fetchPhotographers();
+  }, [username]);
+
+  const fetchPhotographers = async () => {
+    try {
+      const response = await fetch('/all_photographers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: 'Photographer' }),
+      });
+      const data = await response.json();
+      setAllPhotoList(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchPhotoList = async () => {
+    try {
+      const response = await fetch(`/photo_upload/list`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+      const data = await response.json();
+      setPhotoList(data);
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+    }
+  }
+
+  // Sample photo data, representing a list of photo details
+  const photos = [
+    { id: 1, url: '/data/photos/photo1.jpg', alt: 'Photo 1' },
+    { id: 2, url: '/data/photos/photo2.jpg', alt: 'Photo 2' },
+    { id: 3, url: '/data/photos/photo3.jpg', alt: 'Photo 3' },
+    { id: 4, url: '/data/photos/photo4.jpg', alt: 'Photo 4' },
+    { id: 5, url: '/data/photos/photo5.jpg', alt: 'Photo 5' },
+  ];
+
   const location = useLocation();
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
@@ -160,11 +217,35 @@ function Home() {
                     </Button>
                   </Grid>
                   </form>
-          <PhotoGrid photos={photos} photographerName="Amey" />
-          <PhotoGrid photos={photos} photographerName="Piston" />
-          <PhotoGrid photos={photos} photographerName="Legend" />
-          <PhotoGrid photos={photos} photographerName="Micke" />
-          <PhotoGrid photos={photos} photographerName="Tun ton" />
+          {/* Display photos based on the user role */}
+            <div>
+              <h2>Your Photos</h2>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                  gap: '16px',
+                  marginBottom: '18px',
+                }}
+              >
+                {photoList.length > 0 ? (
+                  photoList.map((photo) => (
+                    <Link
+                      key={photo.filename}
+                      to={`/photographer/${username}/${photo.filename}`}
+                    >
+                      <img
+                        src={photo.url}
+                        alt={`Photo ${photo.filename}`}
+                        style={{ width: '190px', height: '120px' }}
+                      />
+                    </Link>
+                  ))
+                ) : (
+                  <p>No photos available</p>
+                )}
+              </div>
+            </div>
         </div>
       </div>
     </>

@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Cookies from 'js-cookie';
+import { Paper } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Register() {
   const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' };
@@ -28,11 +30,15 @@ function Register() {
     city: '',
     username: '',
     role: '', // Add the 'role' field
+    photographertype: '',
   });
 
   const [countryError, setCountryError] = React.useState('');
   const [cityError, setCityError] = React.useState('');
   const [usernameError, setUsernameError] = React.useState('');
+
+  const [roleTags, setRoleTags] = React.useState([]);
+  const [roleTagInput, setRoleTagInput] = React.useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -57,6 +63,29 @@ function Register() {
     handleInputChange(event);
   };
 
+  const handleRoleTagInputChange = (e) => {
+    setRoleTagInput(e.target.value);
+  };
+
+  const handleRoleTagInputKeyPress = (e) => {
+    if (e.key === 'Enter' && roleTagInput.trim() !== '') {
+      setRoleTags([...roleTags, roleTagInput.trim()]);
+      setRoleTagInput('');
+    }
+  };
+
+  const addRoleTag = () => {
+    if (roleTagInput.trim() !== '') {
+      setRoleTags([...roleTags, roleTagInput.trim()]);
+      setRoleTagInput('');
+    }
+  };
+
+  const removeRoleTag = (tagToRemove) => {
+    const updatedRoleTags = roleTags.filter((tag) => tag !== tagToRemove);
+    setRoleTags(updatedRoleTags);
+  };
+
   const isFormValid = () => {
     return (
       formData.firstName &&
@@ -66,7 +95,8 @@ function Register() {
       formData.country &&
       formData.city &&
       formData.username &&
-      selectedRole
+      selectedRole &&
+      roleTags
     );
   };
 
@@ -78,29 +108,25 @@ function Register() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData, // Include the existing form data
-          role: selectedRole, // Include the selected role
+          ...formData,
+          role: selectedRole,
+          roleTags: roleTags, // Include the role tags
         }),
       });
 
       if (response.status === 200) {
         const jwtToken = response.headers.get('Authorization');
-        const token = jwtToken.split(' ')[1]
-        // const customHeaders = new Headers();
-        // customHeaders.append('Authorization', `Bearer ${token}`);
-
+        const token = jwtToken.split(' ')[1];
         if (jwtToken) {
-          // Set the JWT token as a cookie
-          Cookies.set('token', token, { expires: 1 / 24 }); // Expires in 1 hour
+          Cookies.set('token', token, { expires: 1 / 24 });
           window.location.href = `/verify2FA`;
         }
         handleSubmit();
       } else if (response.status === 202) {
-        alert('You already have an account')
-        window.location.href = '/'
+        alert('You already have an account');
+        window.location.href = '/';
       } else {
-        setCountryError('Country and city not found. Please check the location.');
-        setCityError('Country and city not found. Please check the location.');
+        alert('username already exists');
       }
     } catch (error) {
       console.error('Error signing up user:', error);
@@ -108,7 +134,6 @@ function Register() {
   };
 
   const handleGoogleLogin = () => {
-    // Redirect the user to the backend for Google authentication
     window.location.href = `/login_user`;
   };
 
@@ -122,7 +147,6 @@ function Register() {
     if (formData.country && formData.city && formData.username) {
       signup();
     } else {
-      // Handle the case where country, city, or username is missing.
       if (!formData.country) {
         setCountryError('Please provide a country.');
       }
@@ -135,7 +159,7 @@ function Register() {
     }
   };
 
-  const isSignUpButtonDisabled = !isFormValid(); // Determine if the "Sign Up" button should be disabled
+  const isSignUpButtonDisabled = !isFormValid();
 
   return (
     <ThemeProvider theme={createTheme()}>
@@ -245,6 +269,52 @@ function Register() {
                 />
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="roleTag"
+                  label="What kind of photographer are you?"
+                  id="roleTag"
+                  value={roleTagInput}
+                  onChange={handleRoleTagInputChange}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleRoleTagInputKeyPress(e);
+                    }
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <span onClick={addRoleTag} style={{ cursor: 'pointer' }}>
+                        #
+                      </span>
+                    ),
+                  }}
+                />
+              </Grid>
+              {roleTags.map((tag) => (
+                <Grid item key={tag} xs={3}>
+                  <Paper
+                    variant="outlined"
+                    square
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '4px 8px',
+                    }}
+                  >
+                    {tag}
+                    <span
+                      onClick={() => removeRoleTag(tag)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <CloseIcon />
+                    </span>
+                  </Paper>
+                </Grid>
+              ))}
+              <Grid item xs={12}>
                 <RadioGroup
                   aria-label="role"
                   name="role"
@@ -268,14 +338,13 @@ function Register() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, bgcolor: "black" }}
+              sx={{ mt: 3, mb: 2, bgcolor: 'black' }}
               disabled={isSignUpButtonDisabled}
               onClick={handleSubmit}
             >
               Sign Up
             </Button>
-            <Typography sx={{ textAlign: "center" }}>OR</Typography>
-            {/* Google sign-in button */}
+            <Typography sx={{ textAlign: 'center' }}>OR</Typography>
             <Button
               component="label"
               variant="contained"
