@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState }  from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import TopBar from '../components/TopBar';
@@ -6,6 +6,92 @@ import { useParams } from 'react-router-dom';
 import Profile from '../components/Profile';
 import moment from 'moment';
 import './Booking.css';
+
+import Button from '@mui/material/Button'; 
+import Dialog from '@mui/material/Dialog'; 
+import DialogTitle from '@mui/material/DialogTitle'; 
+import DialogContent from '@mui/material/DialogContent'; 
+import DialogActions from '@mui/material/DialogActions';
+
+let initialValues = {
+  sDay: '',
+  sTime: '',
+  eDay: '',
+  eTime: '',
+  type: '',
+  location: ''
+}
+
+function BookingDialog(props) { 
+
+  const { onClose, open} = props; 
+  const handleClose = () => { onClose(); console.log(initialValues); console.log(quote) }; 
+
+  const [quote, setQuote] = useState(initialValues);
+
+  const [open1, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true);};
+  const handleClose1 = () => { setOpen(false); console.log(initialValues); console.log(quote) }; 
+
+  const onChange = (e) => {
+    setQuote({...quote, [e.target.name]: e.target.value});
+  };
+  // const [name, setName] = useState(initialValues);
+  // const nameChangeHandler = (e) => {
+  //     setName(e.target.value)
+  // };
+
+  return ( 
+      <Dialog onClose={handleClose} open={open}> 
+          <DialogTitle>Booking Information</DialogTitle> 
+          <DialogContent dividers> 
+              <p>Please enter your information</p>
+              <p>Start Time:    
+                <input type="date" placeholder="Enter Start Day"
+                value={ quote.sDay || "" }
+                name="sDay"
+                onChange={ onChange }/>
+                <input type="time" placeholder="Enter Start Time"
+                value={ quote.sTime || "" }
+                name="sTime"
+                onChange={ onChange }/></p>
+              <p>End Time:      
+                <input type="date" placeholder="Enter End Day"
+                value={ quote.eDay || "" }
+                name="eDay"
+                onChange={ onChange }/>
+                <input type="time" placeholder="Enter End Time"
+                value={ quote.eTime || "" }
+                name="eTime"
+                onChange={ onChange }/></p>
+              <p>Type of Event: 
+                <input type="text" placeholder="Enter Type of Event"
+                value={ quote.type || "" }
+                name="type"
+                onChange={ onChange }/></p>
+              <p>Location: 
+                <input type="text" placeholder="Enter Location"
+                value={ quote.location || "" }
+                name="location"
+                onChange={ onChange }/></p>
+          </DialogContent> 
+          <DialogActions> 
+          
+          <Button variant="outlined" color="success" onClick={handleClickOpen}> Submit </Button>
+            <Dialog onClose={handleClose1} open={open1}> 
+            <DialogTitle>Accept Alert</DialogTitle> 
+            <DialogContent dividers> 
+              <p>Are you sure you want to book this date?</p> 
+            </DialogContent> 
+            <DialogActions> 
+            <Button variant="outlined" color="success" onClick={handleClose}> Accept </Button> 
+            </DialogActions> 
+            </Dialog> 
+          </DialogActions> 
+      </Dialog> 
+  ); 
+}
+
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
@@ -18,6 +104,10 @@ const localizer = momentLocalizer(moment);
 
 const Booking = () => {
 
+  const [open, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true);}; 
+  const handleClose = () => { setOpen(false); };
+
   const { name } = useParams();
   const today = new Date();
 
@@ -25,26 +115,26 @@ const Booking = () => {
     {
       id: 1,
       title: 'Event 1',
-      start: new Date(2023, 10, 1, 10, 0),
-      end: new Date(2023, 10, 1, 12, 0),
+      start: new Date(2023, 11, 12, 10, 0),
+      end: new Date(2023, 11, 12, 12, 0),
     },
     {
       id: 2,
       title: 'Event 2',
-      start: new Date(2023, 9, 26, 14, 0),
-      end: new Date(2023, 9, 26, 16, 0),
+      start: new Date(2023, 11, 26, 14, 0),
+      end: new Date(2023, 11, 26, 16, 0),
     },
     {
       id: 3,
       title: 'Event 3',
-      start: new Date(2023, 10, 1, 10, 0),
-      end: new Date(2023, 10, 1, 12, 0),
+      start: new Date(2023, 16, 1, 10, 0),
+      end: new Date(2023, 17, 1, 12, 0),
     },
     {
       id: 4,
       title: 'Event 4',
-      start: new Date(2023, 10, 1, 13, 0),
-      end: new Date(2023, 10, 1, 16, 0),
+      start: new Date(2023, 11, 2, 13, 0),
+      end: new Date(2023, 11, 2, 16, 0),
     },
   ];
 
@@ -84,7 +174,6 @@ const Booking = () => {
   };
 
   return (
-    
     <>
       <TopBar />
       <div
@@ -112,6 +201,7 @@ const Booking = () => {
           <div className="center" style={{ marginRight: '40px' }}>
             <Profile photoGrapherName={name} mode={'booking'} />
           </div>
+
           <Calendar
             localizer={localizer}
             selectable={true}
@@ -126,6 +216,13 @@ const Booking = () => {
             />
 
         </div>
+        <div style={{marginTop: '20px', marginLeft: '1100px' }}>
+
+      <Button variant="outlined" onClick={handleClickOpen}>Request Booking 
+      </Button> 
+      <BookingDialog open={open} onClose={handleClose} /> 
+
+      </div>
       </div>
     </>
   );
