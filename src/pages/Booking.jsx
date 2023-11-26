@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import Profile from '../components/Profile';
 import moment from 'moment';
 import './Booking.css';
+import Link from '@mui/material/Link';
 
 import Button from '@mui/material/Button'; 
 import Dialog from '@mui/material/Dialog'; 
@@ -84,7 +85,9 @@ function BookingDialog(props) {
               <p>Are you sure you want to book this date?</p> 
             </DialogContent> 
             <DialogActions> 
+            <Link href="/request_booking" variant="body2">
             <Button variant="outlined" color="success" onClick={handleClose}> Accept </Button> 
+            </Link>
             </DialogActions> 
             </Dialog> 
           </DialogActions> 
@@ -216,7 +219,7 @@ const Booking = () => {
             />
 
         </div>
-        <div style={{marginTop: '20px', marginLeft: '1100px' }}>
+        <div style={{marginTop: '20px', marginLeft: '950px' }}>
 
       <Button variant="outlined" onClick={handleClickOpen}>Request Booking 
       </Button> 
