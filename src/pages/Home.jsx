@@ -6,18 +6,28 @@ import PhotoGrid from '../components/PhotoGrid';
 import TopBar from '../components/TopBar';
 import MenuSidebar from '../components/MenuSidebar';
 
-// Sample photo data, representing a list of photo details
-const photos = [
-  { id: 1, url: '/data/photos/photo1.jpg', alt: 'Photo 1' },
-  { id: 2, url: '/data/photos/photo2.jpg', alt: 'Photo 2' },
-  { id: 3, url: '/data/photos/photo3.jpg', alt: 'Photo 3' },
-  { id: 4, url: '/data/photos/photo4.jpg', alt: 'Photo 4' },
-  { id: 5, url: '/data/photos/photo5.jpg', alt: 'Photo 5' },
-];
-
 // Define the Home component
 function Home() {
+  const [photoList, setPhotoList] = useState([]);
+
+  fetchPhotoList();
   const location = useLocation();
+
+  const fetchPhotoList = async () => {
+    try {
+      const response = await fetch(`/photo_upload/list`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+      const data = await response.json();
+      setPhotoList(data);
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+    }
+  };
   
   return (
     <>
