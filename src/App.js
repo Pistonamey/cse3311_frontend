@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Photographer from './pages/Photographer';
 import Booking from './pages/Booking';
+import RequestBooking from './pages/RequestBooking';
 
 // Import individual page components
 import Login from './pages/Login';
@@ -161,6 +162,12 @@ function App() {
                 />
               }
             />
+              <Route
+              path="/request_booking"
+              element={<RequestBooking />}
+              />
+              
+            {/*add pages here*/}
             <Route
               path="/filtered"
               element={
