@@ -13,14 +13,48 @@ import {
   Grid,
 } from '@mui/material';
 import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuSidebar from '../components/MenuSidebar';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-
 // Define the Home component
 function Home() {
-  const token = Cookies.get('token')
+  const [photoList, setPhotoList] = useState([]);
+
+  const token = Cookies.get('token');
+  const decoded = jwtDecode(token);
+  const username = decoded['username'];
+
+  useEffect(() => {
+    fetchPhotoList();
+  }, [username]);
+
+  const fetchPhotoList = async () => {
+    try {
+      const response = await fetch(`/photo_upload/list`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+      const data = await response.json();
+      setPhotoList(data);
+    } catch (error) {
+      console.error('Error fetching photo list:', error);
+    }
+  }
+
+  // Sample photo data, representing a list of photo details
+  const photos = [
+    { id: 1, url: '/data/photos/photo1.jpg', alt: 'Photo 1' },
+    { id: 2, url: '/data/photos/photo2.jpg', alt: 'Photo 2' },
+    { id: 3, url: '/data/photos/photo3.jpg', alt: 'Photo 3' },
+    { id: 4, url: '/data/photos/photo4.jpg', alt: 'Photo 4' },
+    { id: 5, url: '/data/photos/photo5.jpg', alt: 'Photo 5' },
+  ];
+
   const location = useLocation();
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
