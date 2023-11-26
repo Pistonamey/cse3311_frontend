@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import Cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuSidebar from '../components/MenuSidebar';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
