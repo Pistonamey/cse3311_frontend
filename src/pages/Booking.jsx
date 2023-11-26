@@ -62,9 +62,9 @@ const localizer = momentLocalizer(moment);
 
 const Booking = () => {
 
-const [open, setOpen] = React.useState(false); 
-const handleClickOpen = () => { setOpen(true);}; 
-const handleClose = () => { setOpen(false); };
+  const [open, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true);}; 
+  const handleClose = () => { setOpen(false); };
 
   const { name } = useParams();
   const today = new Date();
