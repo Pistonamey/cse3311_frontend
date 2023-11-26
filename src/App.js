@@ -19,7 +19,7 @@ import Profile from './components/Profile';
 import Commenting from './pages/Commenting';
 import User_Profile from './pages/User_Profile';
 import Cookies from 'js-cookie';
-
+import FilteredPhotos from './pages/FilteredPhotos';
 // Define the main App component
 function App() {
   let isAuthenticated = false;
@@ -157,6 +157,15 @@ function App() {
               element={
                 <PrivateRoute
                   element={<Booking />}
+                  isAuthenticated={isAuthenticated}
+                />
+              }
+            />
+            <Route
+              path="/filtered"
+              element={
+                <PrivateRoute
+                  element={<FilteredPhotos />}
                   isAuthenticated={isAuthenticated}
                 />
               }
