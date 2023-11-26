@@ -13,47 +13,38 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent'; 
 import DialogActions from '@mui/material/DialogActions';
 
-function SimpleDialog(props) { 
-
-  const { onClose, open } = props; 
-  const handleClose = () => { onClose(); }; 
-
-  return ( 
-      <Dialog onClose={handleClose} open={open}> 
-          <DialogTitle>Accept Alert</DialogTitle> 
-          <DialogContent dividers> 
-              <p>Are you sure you want to book this date?</p> 
-          </DialogContent> 
-          <DialogActions> 
-              <Button variant="outlined" color="success"> 
-                Accept 
-              </Button> 
-          </DialogActions> 
-      </Dialog> 
-  ); 
-}
-
 function BookingDialog(props) { 
 
-  const { onClose, open } = props; 
+  const { onClose, open} = props; 
   const handleClose = () => { onClose(); }; 
+
+  const [open1, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true);};
+  const handleClose1 = () => { setOpen(false); }; 
 
   return ( 
       <Dialog onClose={handleClose} open={open}> 
           <DialogTitle>Booking Information</DialogTitle> 
           <DialogContent dividers> 
               <p>Please enter your information</p>
-              <p>First Name: <input type="text" placeholder="Enter First Name"/></p> 
-              <p>Last Name: <input type="text" placeholder="Enter Last Name"/></p> 
-              <p>Start Time: <input type="date" placeholder="Enter Start Time"/></p> 
-              <p>End Time: <input type="date" placeholder="Enter End Time"/></p>  
+              <p>First Name:    <input type="text" placeholder="Enter First Name"/></p> 
+              <p>Last Name:     <input type="text" placeholder="Enter Last Name"/></p> 
+              <p>Start Time:    <input type="date" placeholder="Enter Start Time"/></p> 
+              <p>End Time:      <input type="date" placeholder="Enter End Time"/></p>  
               <p>Type of Event: <input type="text" placeholder="Enter Type of Event"/></p> 
           </DialogContent> 
           <DialogActions> 
-              <Button variant="outlined" color="success"> 
-                Submit
-                <SimpleDialog open={open} onClose={handleClose} />  
-              </Button> 
+          
+          <Button variant="outlined" color="success" onClick={handleClickOpen}> Submit </Button>
+            <Dialog onClose={handleClose1} open={open1}> 
+            <DialogTitle>Accept Alert</DialogTitle> 
+            <DialogContent dividers> 
+              <p>Are you sure you want to book this date?</p> 
+            </DialogContent> 
+            <DialogActions> 
+            <Button variant="outlined" color="success" onClick={handleClose}> Accept </Button> 
+            </DialogActions> 
+            </Dialog> 
           </DialogActions> 
       </Dialog> 
   ); 
@@ -71,8 +62,8 @@ const localizer = momentLocalizer(moment);
 
 const Booking = () => {
 
-  const [open, setOpen] = React.useState(false); 
-const handleClickOpen = () => { setOpen(true); }; 
+const [open, setOpen] = React.useState(false); 
+const handleClickOpen = () => { setOpen(true);}; 
 const handleClose = () => { setOpen(false); };
 
   const { name } = useParams();
@@ -82,8 +73,8 @@ const handleClose = () => { setOpen(false); };
     {
       id: 1,
       title: 'Event 1',
-      start: new Date(2023, 11, 1, 10, 0),
-      end: new Date(2023, 11, 1, 12, 0),
+      start: new Date(2023, 11, 12, 10, 0),
+      end: new Date(2023, 11, 12, 12, 0),
     },
     {
       id: 2,
@@ -94,14 +85,14 @@ const handleClose = () => { setOpen(false); };
     {
       id: 3,
       title: 'Event 3',
-      start: new Date(2023, 11, 1, 10, 0),
-      end: new Date(2023, 11, 1, 12, 0),
+      start: new Date(2023, 16, 1, 10, 0),
+      end: new Date(2023, 17, 1, 12, 0),
     },
     {
       id: 4,
       title: 'Event 4',
-      start: new Date(2023, 11, 1, 13, 0),
-      end: new Date(2023, 11, 1, 16, 0),
+      start: new Date(2023, 11, 2, 13, 0),
+      end: new Date(2023, 11, 2, 16, 0),
     },
   ];
 
@@ -141,9 +132,6 @@ const handleClose = () => { setOpen(false); };
   };
 
   return (
-
-    
-    
     <>
       <TopBar />
       <div
@@ -186,15 +174,13 @@ const handleClose = () => { setOpen(false); };
             />
 
         </div>
-        <div style={{marginTop: '20px', marginLeft: '1000px' }}>
-
+        <div style={{marginTop: '20px', marginLeft: '1100px' }}>
 
       <Button variant="outlined" onClick={handleClickOpen}>Request Booking 
       </Button> 
       <BookingDialog open={open} onClose={handleClose} /> 
 
       </div>
-
       </div>
     </>
   );
