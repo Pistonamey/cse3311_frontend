@@ -73,6 +73,8 @@ function BookingDialog(props) {
   && quote.location.length > 0
   && quote.sDay < quote.eDay;
 
+  
+
   return ( 
       <Dialog onClose={handleClose} open={open}> 
           <DialogTitle>Booking Information</DialogTitle> 

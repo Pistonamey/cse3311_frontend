@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import BookingDialog from '../pages/Booking'
+
 import Cookies from 'js-cookie'
 import { useParams } from 'react-router-dom';
 
@@ -61,6 +63,8 @@ return (
         <div>
             <img src={logo.url} alt="" width="140px" height="140px" />
             <h1>Request Details</h1>
+            <h2></h2>
+
             {/* display request details here */}
             <Grid container justifyContent="flex-middle">
                 <Grid item>
