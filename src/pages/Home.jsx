@@ -247,7 +247,11 @@ function Home() {
             ) : (
               Object.entries(allphotoList).map(([photographerUsername, photographerData], index) => (
                 <div key={index}>
-                  {photographerData.photos && photographerData.photos.length > 0 && photographerUsername != username && photographerData.photos != null && <h3>{photographerUsername}</h3>}
+                  {photographerData.photos && photographerData.photos.length > 0 && photographerUsername !== username && photographerData.photos !== null && (
+                    <Link to={`/photographer/${photographerUsername}`}>
+                      <h3>{photographerUsername}</h3>
+                    </Link>
+                  )}
                   <div
                     style={{
                       display: 'grid',
@@ -256,7 +260,7 @@ function Home() {
                       marginBottom: '18px',
                     }}
                   >
-                    {photographerData.photos && photographerData.photos.length > 0 && photographerUsername != username && photographerData.photos != null ? (
+                    {photographerData.photos && photographerData.photos.length > 0 && photographerUsername !== username && photographerData.photos !== null ? (
                       photographerData.photos.map((photo, photoIndex) => (
                         <Link
                           key={photo.filename}
