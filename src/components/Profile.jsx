@@ -1,29 +1,66 @@
 // Importing necessary libraries and components
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { CalendarMonthSharp } from '@mui/icons-material';
 
-// Define the Profile functional component that accepts photoGrapherName as a prop
-function Profile({photoGrapherName}) {
+// Define the Profile functional component that accepts photographerName as a prop
+function Profile({ photographerName }) {
+  const [profileImage, setProfileImage] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const username = useParams().name;
+  console.log(username)
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetch('/profile_image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setProfileImage(data); // Assuming the endpoint returns a single image URL
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile image:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchProfileImage();
+  }, [photographerName]);
+
   return (
     // Container div for the profile
     <div style={{ display: 'flex', marginBottom: '20px', alignItems: 'center' }}>
       
       {/* Display the profile image */}
-      <img 
-        src="/data/photos/user.png" 
-        alt="Profile" 
-        style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }}
-      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <img 
+          src={profileImage} 
+          alt="Profile" 
+          style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }}
+        />
+      )}
       
       {/* Container for photographer's name, title, and social media icons */}
       <div style={{ marginLeft: '20px' }}>
         
         {/* Display the photographer's name */}
-        <h2>{photoGrapherName}</h2>
+        <h2>{photographerName}</h2>
         
         {/* Display the title or description */}
         <p>Title or Description</p>
@@ -47,7 +84,7 @@ function Profile({photoGrapherName}) {
           </a>
           
           {/* Booking Link with a calendar icon */}
-          <Link to={`/photographer/${photoGrapherName}/Booking`} style={{ color: '#FFF', textDecoration: 'none' }}>
+          <Link to={`/photographer/${photographerName}/Booking`} style={{ color: '#FFF', textDecoration: 'none' }}>
             Booking: <CalendarMonthSharp style={{ color: 'white' }}/>
           </Link>
         </div>

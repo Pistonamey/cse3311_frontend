@@ -6,6 +6,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { Link, useParams } from 'react-router-dom';
+import { CalendarMonthSharp } from '@mui/icons-material';
 
 function Photographer() {
   const username = useParams().name;
@@ -146,6 +147,9 @@ function Photographer() {
                     <TwitterIcon style={{ color: '#1DA1F2' }} />
                   </a>
                 )}
+                <Link to={`/photographer/${username}/Booking`} style={{ color: textColor, textDecoration: 'none' }}>
+                  Booking: <CalendarMonthSharp style={{ color: textColor }} />
+                </Link>
               </div>
             </div>
           </div>
