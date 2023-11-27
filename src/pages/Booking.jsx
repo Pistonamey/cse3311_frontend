@@ -28,7 +28,7 @@ let initialValues = {
 
 function BookingDialog(props) { 
 
-  const {name} = useParams();
+  const name = useParams().name;
 
   const { onClose, open} = props; 
   const handleClose = () => { onClose(); console.log(initialValues); console.log(quote) }; 
