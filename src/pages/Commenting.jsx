@@ -1,15 +1,21 @@
+// Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
 import TopBar from '../components/TopBar';
 import { useParams } from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
+
+// Placeholder function, replace it with your actual implementation
+const getCurrentUser = () => {
+  const token = Cookies.get('token')
+  const decoded = jwtDecode(token)
+  const username = decoded['username']
+  return { username: username };
+};
 
 const Commenting = () => {
-  useEffect(() => {
-    fetchImage();
-    fetchLikeDislikeCount();
-  }, []);
-
   const { photoid } = useParams();
   const { name } = useParams();
 
@@ -18,6 +24,11 @@ const Commenting = () => {
   const [hasLiked, setHasLiked] = useState(false);
   const [hasDisliked, setHasDisliked] = useState(false);
   const [Image, setImage] = useState(null);
+
+  useEffect(() => {
+    fetchImage();
+    fetchLikeDislikeCount();
+  }, []);
 
   const fetchLikeDislikeCount = async () => {
     try {
@@ -160,6 +171,9 @@ const Commenting = () => {
     setHasDisliked(dislikedBool);
   }, [photoid]);
 
+  const { username } = getCurrentUser();
+  const isCurrentUserUploader = name === username;
+
   return (
     <>
       <TopBar />
@@ -212,9 +226,11 @@ const Commenting = () => {
             <span style={{ margin: '0 10px' }}>{dislikes} Dislikes</span>
           </div>
           <div style={{ marginTop: '20px' }}>
-            <button onClick={handleDelete} style={{ fontSize: '20px', color: '#f44336', cursor: 'pointer' }}>
-              Delete
-            </button>
+            {isCurrentUserUploader && (
+              <button onClick={handleDelete} style={{ fontSize: '20px', color: '#f44336', cursor: 'pointer' }}>
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
