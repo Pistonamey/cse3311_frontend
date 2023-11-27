@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import PhotoGrid from '../components/PhotoGrid';
 import TopBar from '../components/TopBar';
 import {
@@ -9,11 +9,14 @@ import {
   Button,
   TextField,
   Grid,
+  Box
 } from '@mui/material';
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TagIcon from '@mui/icons-material/Tag';
+import CameraEnhanceIcon from '@mui/icons-material/CameraEnhance';
 
 // Define the Home component
 function Home() {
@@ -65,19 +68,32 @@ function Home() {
     }
   };
 
-  const location = useLocation();
-  const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState('');
   const navigate = useNavigate();
+
+  const [tags, setTags] = useState([]);
+  const [secondtags, setSecondTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
+  const [secondtagInput, setSecondTagInput] = useState('');
 
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
+  };
+
+  const handleTagInputChangePhotographer = (e) => {
+    setSecondTagInput(e.target.value);
   };
 
   const handleTagInputKeyPress = (e) => {
     if (e.key === 'Enter' && tagInput.trim() !== '') {
       setTags([...tags, tagInput.trim()]);
       setTagInput('');
+    }
+  };
+
+  const secondhandleTagInputKeyPress = (e) => {
+    if (e.key === 'Enter' && secondtagInput.trim() !== '') {
+      setSecondTags([...secondtags, secondtagInput.trim()]);
+      setSecondTagInput('');
     }
   };
 
@@ -88,17 +104,21 @@ function Home() {
     }
   };
 
+  const secondaddTag = () => {
+    if (tagInput.trim() !== '') {
+      setSecondTags([...secondtags, secondtagInput.trim()]);
+      setSecondTagInput('');
+    }
+  };
+
   const removeTag = (tagToRemove) => {
     const updatedTags = tags.filter((tag) => tag !== tagToRemove);
     setTags(updatedTags);
   };
 
-  const switchUser = (newUser) => {
-    if (newUser === prevUsername) {
-      return false;
-    }
-    setPrevUsername(newUser);
-    return true;
+  const secondremoveTag = (tagToRemove) => {
+    const updatedTags = secondtags.filter((tag) => tag !== tagToRemove);
+    setSecondTags(updatedTags);
   };
 
   const handleSubmit = async (e) => {
@@ -140,78 +160,183 @@ function Home() {
     }
   };
 
+  const handleSubmitPhotographer = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append('tags', JSON.stringify(secondtags));
+
+    try {
+      const response = await fetch(`/searchByPhotographerTag`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();  // Parse the JSON response
+        console.log(data);
+
+        setTags([]);
+        setTagInput('');
+        navigate('/filtered', { state: { data } });
+      } else if (response.status === 400) {
+        alert('Invalid file type');
+      } else if (response.status === 403) {
+        alert('Enter a title');
+      } else if (response.status === 401) {
+        alert('Unauthorized. Please log in.');
+      } else if (response.status === 409) {
+        alert('This title already exists')
+      } else {
+        alert('File upload failed:', response);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
   return (
     <>
       <TopBar />
-      <div
-        style={{
-          backgroundColor: '#2C2C2C',
-          color: '#FFF',
-          minHeight: 'calc(100vh - 60px)',
-          width: '100%',
-          overflowY: 'auto',
-          boxSizing: 'border-box',
-          position: 'relative',
-        }}
-      >
+      <div style={{
+        backgroundColor: '#2C2C2C',
+        color: '#FFF',
+        minHeight: 'calc(100vh - 60px)', // Adjusting the viewport height
+        width: '100%', // Updated from 100vw to 100%
+        overflowY: 'auto',
+        boxSizing: 'border-box',
+        position: 'relative',
+      }}>
         <div style={{ padding: '20px', marginTop: '60px', width: '100%' }}>
           <form onSubmit={handleSubmit}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Tags"
-                variant="outlined"
-                value={tagInput}
-                onChange={handleTagInputChange}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleTagInputKeyPress(e);
-                  }
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <span onClick={addTag} style={{ cursor: 'pointer' }}>
-                      #
-                    </span>
-                  ),
-                }}
-              />
-            </Grid>
-            {tags.map((tag) => (
-              <Grid item key={tag} xs={3}>
-                <Paper
+            {/* Tags for filtering photos */}
+            <Grid container spacing={2}>
+              <Grid item xs={9}>
+                <TextField
+                  fullWidth
+                  label="Tags"
                   variant="outlined"
-                  square
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '4px 8px',
+                  value={tagInput}
+                  sx={{ backgroundColor: "white" }}
+                  onChange={handleTagInputChange}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleTagInputKeyPress(e);
+                    }
                   }}
-                >
-                  {tag}
-                  <span
-                    onClick={() => removeTag(tag)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <CloseIcon />
-                  </span>
-                </Paper>
+                  InputProps={{
+                    startAdornment: (
+                      <span onClick={addTag} style={{ cursor: 'pointer' }}>
+                        #
+                      </span>
+                    ),
+                  }}
+                />
               </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                startIcon={<CloudUploadIcon />}
-                type="submit"
-              >
-                Filter
-              </Button>
+              <Grid item xs={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  startIcon={<TagIcon />}
+                  type="submit"
+                >
+                  Filter by Photos
+                </Button>
+              </Grid>
+              {/* Display selected tags */}
+              {tags.map((tag) => (
+                <Grid item key={tag} xs={3}>
+                  <Paper
+                    variant="outlined"
+                    square
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '4px 8px',
+                    }}
+                  >
+                    {tag}
+                    <span
+                      onClick={() => removeTag(tag)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <CloseIcon />
+                    </span>
+                  </Paper>
+                </Grid>
+              ))}
             </Grid>
           </form>
+          {/* Form for filtering photos by photographer tags */}
+          <form onSubmit={handleSubmitPhotographer}>
+            <Grid container spacing={2} sx={{ marginTop: "5px" }}>
+              <Grid item xs={12}>
+                <Box display="flex" alignItems="center" justifyContent="flex-start">
+                  <TextField
+                    label="Tags"
+                    variant="outlined"
+                    value={secondtagInput}
+                    sx={{ backgroundColor: "white", flex: 1, width: "30%" }}
+                    onChange={handleTagInputChangePhotographer}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        secondhandleTagInputKeyPress(e);
+                      }
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <span onClick={secondaddTag} style={{ cursor: 'pointer' }}>
+                          #
+                        </span>
+                      ),
+                    }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<CameraEnhanceIcon />}
+                    type="submit"
+                    sx={{ marginLeft: 2 }}
+                  >
+                    Filter By Photographers
+                  </Button>
+                </Box>
+              </Grid>
+              {/* Display selected photographer tags */}
+              {secondtags.map((tag) => (
+                <Grid item key={tag} xs={3} sx={{ marginTop: "10px" }}>
+                  <Paper
+                    variant="outlined"
+                    square
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '4px 8px',
+                    }}
+                  >
+                    {tag}
+                    <span
+                      onClick={() => secondremoveTag(tag)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <CloseIcon />
+                    </span>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </form>
+
+          {/* Display photos based on the user role */}
           <div>
             <h2>Your Photos</h2>
             <div
