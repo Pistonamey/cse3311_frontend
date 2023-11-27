@@ -152,7 +152,6 @@ function Home() {
 
       if (response.ok) {
         const data = await response.json(); // Parse the JSON response
-        console.log(data);
 
         setTags([]);
         setTagInput('');
@@ -191,7 +190,6 @@ function Home() {
 
       if (response.ok) {
         const data = await response.json();  // Parse the JSON response
-        console.log(data);
 
         setTags([]);
         setTagInput('');

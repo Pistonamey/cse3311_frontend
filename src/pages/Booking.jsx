@@ -30,8 +30,6 @@ function BookingDialog(props) {
   const { onClose, open, selectedEvent } = props;
   const handleClose = () => {
     onClose();
-    console.log(initialValues);
-    console.log(quote);
   };
 
   const [quote, setQuote] = useState(initialValues);
@@ -42,8 +40,6 @@ function BookingDialog(props) {
   };
   const handleClose1 = () => {
     setOpen(false);
-    console.log(initialValues);
-    console.log(quote);
   };
 
   const onChange = (e) => {
@@ -52,7 +48,7 @@ function BookingDialog(props) {
 
   const sendEmail = async () => {
     const token = Cookies.get('token');
-
+    
     fetch('/request_booking', {
       method: 'POST',
       headers: {
@@ -78,7 +74,7 @@ function BookingDialog(props) {
     quote.eTime.length > 0 &&
     quote.type.length > 0 &&
     quote.location.length > 0 &&
-    quote.sDay < quote.eDay;
+    ((quote.sDay == quote.eDay) && (quote.sTime < quote.eTime)) || (((quote.sDay < quote.eDay)));
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -183,6 +179,9 @@ const localizer = momentLocalizer(moment);
 const Booking = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedEvent, setSelectedEvent] = React.useState(null);
+  const token = Cookies.get('token');
+  const decoded = jwtDecode(token)
+  const username = decoded['username']
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -207,10 +206,9 @@ const Booking = () => {
         // Convert date strings to Date objects
         const formattedQuotes = quotes.map(quote => ({
           ...quote,
-          start: new Date(quote.start),
-          end: new Date(quote.end),
+          start: new Date(`${quote.startDay} ${quote.startTime}`),
+          end: new Date(`${quote.endDay} ${quote.endTime}`),
         }));
-  
         setEvents(formattedQuotes);
       }
     };
@@ -226,7 +224,6 @@ const Booking = () => {
   };
 
   const handleEventClick = (event, e) => {
-    console.log('Event clicked:', event);
   };
 
   const CustomDateCell = ({ value }) => {
@@ -304,7 +301,7 @@ const Booking = () => {
 
         </div>
 
-        <div style={{ marginTop: '20px', marginLeft: '800px' }}>
+        {username !== name && <div style={{ marginTop: '20px', marginLeft: '800px' }}>
           <Button variant="outlined" onClick={handleClickOpen}>
             Request Booking
           </Button>
@@ -313,7 +310,7 @@ const Booking = () => {
             onClose={handleClose}
             selectedEvent={selectedEvent}
           />
-        </div>
+        </div>}
       </div>
     </>
   );

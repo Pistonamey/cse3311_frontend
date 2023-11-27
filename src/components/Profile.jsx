@@ -12,7 +12,6 @@ function Profile({ photographerName }) {
   const [loading, setLoading] = useState(true);
 
   const username = useParams().name;
-  console.log(username)
 
   useEffect(() => {
     const fetchProfileImage = async () => {

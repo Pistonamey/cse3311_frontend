@@ -6,6 +6,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { Link } from 'react-router-dom';
+import { CalendarMonthSharp } from '@mui/icons-material';
 
 function User_Profile() {
   const token = Cookies.get('token');
@@ -142,7 +143,6 @@ function User_Profile() {
 
   const handleSaveEdit = async () => {
     setEditMode(false);
-    console.log(decoded)
     try {
       const response = await fetch('/saveEditedData', {
         method: 'POST',
@@ -230,12 +230,7 @@ function User_Profile() {
                     onChange={handleChange}
                     placeholder="Enter description"
                   />
-                  <textarea
-                    name="username"
-                    value={editedData.username}
-                    onChange={handleChange}
-                    placeholder="Enter new username"
-                  />
+                  {/* Remove the textarea for username in edit mode */}
                   <textarea
                     name="twitterLink"
                     value={editedData.twitterLink}
@@ -276,6 +271,9 @@ function User_Profile() {
                     <TwitterIcon style={{ color: '#1DA1F2' }} />
                   </a>
                 )}
+                {decoded['role'] !== 'Customer' && <Link to={`/photographer/${username}/Booking`} style={{ color: textColor, textDecoration: 'none' }}>
+                  'Booking:' <CalendarMonthSharp style={{ color: textColor }} />
+                </Link>}
               </div>
               {editMode ? (
                 <button onClick={handleSaveEdit}>Save</button>
@@ -289,9 +287,9 @@ function User_Profile() {
                 </div>
               )}
               {!editingImage && (
-              <button onClick={handleEditImage} style={{ marginLeft: '20px' }}>
-                Edit Profile
-              </button>
+                <button onClick={handleEditImage} style={{ marginLeft: '20px' }}>
+                  Edit Profile
+                </button>
               )}
             </div>
           </div>

@@ -14,7 +14,6 @@ function Proposal({ onAccept }) {
   const quote_id = useParams().quote_id;
 
   const fetchInfo = async () => {
-
     try {
       const response = await fetch(`/proposal/${quote_id}`, {
         method: 'POST',
@@ -25,7 +24,6 @@ function Proposal({ onAccept }) {
       } else if (response.status === 200) {
         const data = await response.json();
         setQuote(data);
-        console.log(data);
       } else {
         alert("This didn't work");
       }
@@ -35,10 +33,9 @@ function Proposal({ onAccept }) {
   };
 
   const acceptRequest = async () => {
-
     try {
       const response = await fetch(`/proposal/${quote_id}/accept`, {
-        method: 'POST', // Use POST method to accept the quote
+        method: 'POST',
       });
 
       if (response.status === 404) {
@@ -47,6 +44,8 @@ function Proposal({ onAccept }) {
         alert(
           'Thank you for accepting the request! The quote has been marked as accepted.'
         );
+        window.location.href = `/photographer/${quote.photographerUsername}/Booking`
+
       } else {
         alert("This didn't work");
       }
