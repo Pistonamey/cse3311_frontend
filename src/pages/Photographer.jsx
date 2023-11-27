@@ -153,7 +153,7 @@ function Photographer() {
               </div>
             </div>
           </div>
-          {isPhotographer === 'Photographer' && (
+          {(
             <div>
               <h2>Your Photos</h2>
               <div
