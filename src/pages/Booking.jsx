@@ -14,6 +14,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent'; 
 import DialogActions from '@mui/material/DialogActions';
 
+import Cookies from 'js-cookie'
+import jwtDecode from 'jwt-decode';
+
 let initialValues = {
   sDay: '',
   sTime: '',
@@ -24,6 +27,8 @@ let initialValues = {
 }
 
 function BookingDialog(props) { 
+
+  const {name} = useParams();
 
   const { onClose, open} = props; 
   const handleClose = () => { onClose(); console.log(initialValues); console.log(quote) }; 
@@ -37,10 +42,36 @@ function BookingDialog(props) {
   const onChange = (e) => {
     setQuote({...quote, [e.target.name]: e.target.value});
   };
-  // const [name, setName] = useState(initialValues);
-  // const nameChangeHandler = (e) => {
-  //     setName(e.target.value)
-  // };
+
+  const sendEmail = async () => { 
+    const token = Cookies.get('token')
+
+      fetch('/request_booking', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(name)
+      })
+      .then(resp => {
+          if (resp.status === 404) {
+              alert("ERROR: sending request");
+          }
+          else if (resp.status === 200) {
+              alert("Thank you for booking with PixEra! Your request was submitted!")
+          } else {
+              alert("This didn't work")
+          }})}
+
+  const isEnabled = 
+  quote.sDay.length > 0 
+  && quote.sTime.length > 0
+  && quote.eDay.length > 0
+  && quote.eTime.length > 0
+  && quote.type.length > 0
+  && quote.location.length > 0
+  && quote.sDay < quote.eDay && quote.sTime < quote.eTime;
 
   return ( 
       <Dialog onClose={handleClose} open={open}> 
@@ -78,16 +109,18 @@ function BookingDialog(props) {
           </DialogContent> 
           <DialogActions> 
           
-          <Button variant="outlined" color="success" onClick={handleClickOpen}> Submit </Button>
+          <Button variant="outlined" color="success" onClick={handleClickOpen} disabled={!isEnabled}> Submit </Button>
             <Dialog onClose={handleClose1} open={open1}> 
             <DialogTitle>Accept Alert</DialogTitle> 
             <DialogContent dividers> 
               <p>Are you sure you want to book this date?</p> 
             </DialogContent> 
             <DialogActions> 
+
             <Link href="/request_booking" variant="body2">
-            <Button variant="outlined" color="success" onClick={handleClose}> Accept </Button> 
+            <Button variant="outlined" color="success" onClick={sendEmail}> Accept </Button> 
             </Link>
+
             </DialogActions> 
             </Dialog> 
           </DialogActions> 
