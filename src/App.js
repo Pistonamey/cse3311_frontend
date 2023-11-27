@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Photographer from './pages/Photographer';
 import Booking from './pages/Booking';
 import RequestBooking from './pages/RequestBooking';
+import Proposal from './pages/Proposal';
 
 // Import individual page components
 import Login from './pages/Login';
@@ -165,6 +166,11 @@ function App() {
               <Route
               path="/request_booking"
               element={<RequestBooking />}
+              />
+
+              <Route
+              path="/:name/proposal"
+              element={<Proposal />}
               />
               
             {/*add pages here*/}

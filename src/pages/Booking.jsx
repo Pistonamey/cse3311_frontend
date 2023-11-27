@@ -52,7 +52,7 @@ function BookingDialog(props) {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(name)
+          body: JSON.stringify({ name })
       })
       .then(resp => {
           if (resp.status === 404) {
@@ -71,7 +71,7 @@ function BookingDialog(props) {
   && quote.eTime.length > 0
   && quote.type.length > 0
   && quote.location.length > 0
-  && quote.sDay < quote.eDay && quote.sTime < quote.eTime;
+  && quote.sDay < quote.eDay;
 
   return ( 
       <Dialog onClose={handleClose} open={open}> 
