@@ -18,6 +18,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TagIcon from '@mui/icons-material/Tag';
 import CameraEnhanceIcon from '@mui/icons-material/CameraEnhance';
 
+import Dialog from '@mui/material/Dialog'; 
+import DialogTitle from '@mui/material/DialogTitle'; 
+import DialogContent from '@mui/material/DialogContent'; 
+import DialogActions from '@mui/material/DialogActions';
+
 // Define the Home component
 function Home() {
   const [photoList, setPhotoList] = useState([]);
@@ -74,6 +79,10 @@ function Home() {
   const [secondtags, setSecondTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [secondtagInput, setSecondTagInput] = useState('');
+
+  const [open, setOpen] = React.useState(false); 
+  const handleClickOpen = () => { setOpen(true);}; 
+  const handleClose = () => { setOpen(false); };
 
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
@@ -213,45 +222,42 @@ function Home() {
       }}>
         <div style={{ padding: '20px', marginTop: '60px', width: '100%' }}>
           <form onSubmit={handleSubmit}>
-            {/* Tags for filtering photos */}
-            <Grid container spacing={2}>
-              <Grid item xs={9}>
-                <TextField
-                  fullWidth
-                  label="Tags"
-                  variant="outlined"
-                  value={tagInput}
-                  sx={{ backgroundColor: "white" }}
-                  onChange={handleTagInputChange}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleTagInputKeyPress(e);
-                    }
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <span onClick={addTag} style={{ cursor: 'pointer' }}>
-                        #
-                      </span>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={3}>
+            {/* Tags for filtering photos */} 
                 <Button
-                  fullWidth
                   variant="contained"
                   color="primary"
                   startIcon={<TagIcon />}
-                  type="submit"
+                  onClick = {handleClickOpen}
                 >
                   Filter by Photos
                 </Button>
-              </Grid>
-              {/* Display selected tags */}
-              {tags.map((tag) => (
-                <Grid item key={tag} xs={3}>
+                <Grid container spacing={2}>
+              <Grid item xs={4}>  
+                <Dialog onClose={handleClose} open={open}> 
+                  <DialogContent dividers> 
+                      <p>Please enter your tag</p>
+                        <TextField
+                          // fullWidth
+                          label="Tags"
+                          variant="outlined"
+                          value={tagInput}
+                          sx={{ backgroundColor: "white" }}
+                          onChange={handleTagInputChange}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleTagInputKeyPress(e);
+                            }
+                          }}
+                          InputProps={{
+                            startAdornment: (
+                              <span onClick={addTag} style={{ cursor: 'pointer' }}>
+                                #
+                              </span>
+                            ),
+                          }}
+                          />
+                {tags.map((tag) => (
                   <Paper
                     variant="outlined"
                     square
@@ -260,25 +266,41 @@ function Home() {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '4px 8px',
+                      color: 'black'
                     }}
                   >
                     {tag}
                     <span
                       onClick={() => removeTag(tag)}
-                      style={{ cursor: 'pointer' }}
-                    >
+                      style={{ cursor: 'pointer' }}>
                       <CloseIcon />
                     </span>
                   </Paper>
-                </Grid>
-              ))}
-            </Grid>
+                ))}
+                   </DialogContent> 
+                    <DialogActions> 
+                      <Button variant="outlined" color="success" onClick={handleSubmit}> Submit </Button> 
+                    </DialogActions>
+                 </Dialog> 
+               </Grid>
+              </Grid>
           </form>
+
+
           {/* Form for filtering photos by photographer tags */}
-          <form onSubmit={handleSubmitPhotographer}>
-            <Grid container spacing={2} sx={{ marginTop: "5px" }}>
+          <form onSubmit={handleSubmitPhotographer}>                  
+          <Button
+              variant="contained"
+              color="primary"
+              startIcon={<CameraEnhanceIcon />}
+              onClick = {handleClickOpen}>
+            Filter By Photographers
+          </Button>
+            <Grid container spacing={2} sx={{ marginTop: "15px" }}>
               <Grid item xs={12}>
-                <Box display="flex" alignItems="center" justifyContent="flex-start">
+              <Dialog onClose={handleClose} open={open}> 
+                  <DialogContent dividers> 
+                      <p>Please enter your tag</p>
                   <TextField
                     label="Tags"
                     variant="outlined"
@@ -299,20 +321,9 @@ function Home() {
                       ),
                     }}
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<CameraEnhanceIcon />}
-                    type="submit"
-                    sx={{ marginLeft: 2 }}
-                  >
-                    Filter By Photographers
-                  </Button>
-                </Box>
-              </Grid>
+
               {/* Display selected photographer tags */}
               {secondtags.map((tag) => (
-                <Grid item key={tag} xs={3} sx={{ marginTop: "10px" }}>
                   <Paper
                     variant="outlined"
                     square
@@ -331,9 +342,14 @@ function Home() {
                       <CloseIcon />
                     </span>
                   </Paper>
-                </Grid>
               ))}
-            </Grid>
+                    </DialogContent> 
+                    <DialogActions> 
+                      <Button variant="outlined" color="success" onClick={handleSubmitPhotographer}> Submit </Button> 
+                    </DialogActions>
+                 </Dialog>
+                 </Grid>
+              </Grid>
           </form>
 
           {/* Display photos based on the user role */}
