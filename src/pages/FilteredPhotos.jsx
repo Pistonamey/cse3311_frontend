@@ -19,15 +19,20 @@ const FilteredPhotos = () => {
                 boxSizing: 'border-box',
                 position: 'relative',
             }}>
+                <h1>Filter Results</h1>
                 <div style={{ display: 'flex', flexWrap: 'wrap', padding: '20px', marginTop: '60px', width: '100%' }}>
                     {data && data.map((photo, index) => (
                         <div key={index} style={{ margin: '10px' }}>
-                            <Link to={`/photographer/${photo.username}`}>
-                                <img src={photo.url} alt={photo.filename} style={{ width: '300px', height: '200px' }} />
-                            </Link>
+
+{photo.url && (
+  <Link to={`/photographer/${photo.username}/${photo.filename}`}>
+    <img src={photo.url} alt={photo.filename} style={{ width: '300px', height: '200px' }} />
+  </Link>
+)}
+
                             <div style={{ marginTop: '10px' }}>
-                                <Link to={`/photographer/${photo.username}/${photo.filename}`} style={{ color: 'white', textDecoration: 'underline' }}>
-                                    Photo: {photo.username}/{photo.filename}
+                                <Link to={`/photographer/${photo.username}`} style={{ color: 'white', textDecoration: 'underline' }}>
+                                     {photo.username}
                                 </Link>
                             </div>
                         </div>
