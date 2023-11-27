@@ -45,7 +45,7 @@ function BookingDialog(props) {
 
   const sendEmail = async () => { 
     const token = Cookies.get('token')
-    
+
       fetch('/request_booking', {
           method: 'POST',
           headers: {
@@ -64,10 +64,14 @@ function BookingDialog(props) {
               alert("This didn't work")
           }})}
 
-  // const [name, setName] = useState(initialValues);
-  // const nameChangeHandler = (e) => {
-  //     setName(e.target.value)
-  // };
+  const isEnabled = 
+  quote.sDay.length > 0 
+  && quote.sTime.length > 0
+  && quote.eDay.length > 0
+  && quote.eTime.length > 0
+  && quote.type.length > 0
+  && quote.location.length > 0
+  && quote.sDay < quote.eDay && quote.sTime < quote.eTime;
 
   return ( 
       <Dialog onClose={handleClose} open={open}> 
@@ -105,7 +109,7 @@ function BookingDialog(props) {
           </DialogContent> 
           <DialogActions> 
           
-          <Button variant="outlined" color="success" onClick={handleClickOpen}> Submit </Button>
+          <Button variant="outlined" color="success" onClick={handleClickOpen} disabled={!isEnabled}> Submit </Button>
             <Dialog onClose={handleClose1} open={open1}> 
             <DialogTitle>Accept Alert</DialogTitle> 
             <DialogContent dividers> 

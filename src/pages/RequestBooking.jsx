@@ -49,7 +49,7 @@ function RequestBooking() {
             <div>
                 <img src={logo.url} alt="" width="140px" height="140px" />
                 <h1>Thank you for booking with PixEra! Your request was submitted!</h1>
-                <h2>Please await for photographer response for it to be displayed on thier calendar!</h2>
+                <h2>Please await for photographer response for it to be displayed on their calendar!</h2>
                 {/* display request details here */}
                 <Grid container justifyContent="flex-middle">
                     <Grid item>
