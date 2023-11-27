@@ -23,28 +23,6 @@ function RequestBooking() {
     const logo = { id: 6, url: '/data/photos/pixera_logo.png', alt: 'Photo 5' }
     const [email, setEmail] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    
-        fetch('/request_booking', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `email=${email}`,
-        })
-        .then(resp => {
-            if (resp.status === 404) {
-                alert("ERROR: sending request");
-            }
-            else if (resp.status === 200) {
-                alert("Thank you for booking with PixEra! Your request was submitted!")
-            } else {
-                alert("This didn't work")
-            }
-        })
-};
-
     return (
         <Container component="main" maxWidth="s">
             <div>

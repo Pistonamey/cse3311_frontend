@@ -52,7 +52,7 @@ function BookingDialog(props) {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ name })
+          body: JSON.stringify({ 'name': name, 'quote': quote })
       })
       .then(resp => {
           if (resp.status === 404) {
@@ -65,15 +65,13 @@ function BookingDialog(props) {
           }})}
 
   const isEnabled = 
-  quote.sDay.length > 0 
+  quote.sDay.length > 0
   && quote.sTime.length > 0
   && quote.eDay.length > 0
   && quote.eTime.length > 0
   && quote.type.length > 0
   && quote.location.length > 0
   && quote.sDay < quote.eDay;
-
-  
 
   return ( 
       <Dialog onClose={handleClose} open={open}> 
@@ -129,7 +127,6 @@ function BookingDialog(props) {
       </Dialog> 
   ); 
 }
-
 
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
@@ -254,7 +251,7 @@ const Booking = () => {
             />
 
         </div>
-        <div style={{marginTop: '20px', marginLeft: '950px' }}>
+        <div style={{marginTop: '20px', marginLeft: '800px' }}>
 
       <Button variant="outlined" onClick={handleClickOpen}>Request Booking 
       </Button> 

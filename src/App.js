@@ -169,7 +169,7 @@ function App() {
               />
 
               <Route
-              path="/:name/proposal"
+              path="/proposal"
               element={<Proposal />}
               />
               

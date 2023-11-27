@@ -62,26 +62,8 @@ function Profile({ photographerName }) {
         {/* Display the photographer's name */}
         <h2>{photographerName}</h2>
         
-        {/* Display the title or description */}
-        <p>Title or Description</p>
-        
         {/* Container for social media icons and booking link */}
         <div style={{ display: 'flex', gap: '10px' }}>
-          
-          {/* LinkedIn Icon linking to LinkedIn */}
-          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-            <LinkedInIcon style={{ color: '#0e76a8' }}/>
-          </a>
-          
-          {/* Instagram Icon linking to Instagram */}
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <InstagramIcon style={{ color: '#C13584' }}/>
-          </a>
-          
-          {/* Twitter Icon linking to Twitter */}
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-            <TwitterIcon style={{ color: '#1DA1F2' }}/>
-          </a>
           
           {/* Booking Link with a calendar icon */}
           <Link to={`/photographer/${photographerName}/Booking`} style={{ color: '#FFF', textDecoration: 'none' }}>
