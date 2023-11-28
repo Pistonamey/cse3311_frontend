@@ -78,7 +78,7 @@ function BookingDialog(props) {
     quote.location.length > 0 &&
     quote.sDay >= currentDate && 
     quote.eDay >= currentDate &&
-    ((quote.sDay == quote.eDay) && (quote.sTime < quote.eTime)) || (((quote.sDay < quote.eDay)));
+    (((quote.sDay == quote.eDay) && (quote.sTime < quote.eTime)) || ((quote.sDay < quote.eDay)));
 
   return (
     <Dialog onClose={handleClose} open={open}>
