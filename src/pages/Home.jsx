@@ -85,8 +85,8 @@ function Home() {
   const handleClose = () => { setOpen(false); };
 
   const [open1, setOpen1] = React.useState(false); 
-  const handleClickOpen1 = () => { setOpen(true);}; 
-  const handleClose1 = () => { setOpen(false); };
+  const handleClickOpen1 = () => { setOpen1(true);}; 
+  const handleClose1 = () => { setOpen1(false); };
 
   const handleTagInputChange = (e) => {
     setTagInput(e.target.value);
@@ -303,12 +303,12 @@ function Home() {
             Filter By Photographers
           </Button>
             <Grid container spacing={2} sx={{ marginTop: "15px" }}>
-              <Grid item xs={8}>
+              <Grid item xs={2}>
               <Dialog onClose={handleClose1} open={open1}> 
                   <DialogContent dividers> 
-                      <p>Please enter your tag</p>
+                      <p>Please enter your photographer tag</p>
                   <TextField
-                    style = {{width: 100}}
+                    style = {{width: 300}}
                     label="Tags"
                     variant="outlined"
                     value={secondtagInput}
