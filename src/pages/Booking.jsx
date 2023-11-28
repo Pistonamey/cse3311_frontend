@@ -67,6 +67,8 @@ function BookingDialog(props) {
     });
   };
 
+  let currentDate = new Date().toJSON().slice(0, 10);
+
   const isEnabled =
     quote.sDay.length > 0 &&
     quote.sTime.length > 0 &&
@@ -74,6 +76,8 @@ function BookingDialog(props) {
     quote.eTime.length > 0 &&
     quote.type.length > 0 &&
     quote.location.length > 0 &&
+    quote.sDay >= currentDate && 
+    quote.eDay >= currentDate &&
     ((quote.sDay == quote.eDay) && (quote.sTime < quote.eTime)) || (((quote.sDay < quote.eDay)));
 
   return (
