@@ -24,6 +24,9 @@ const Commenting = () => {
   const [hasLiked, setHasLiked] = useState(false);
   const [hasDisliked, setHasDisliked] = useState(false);
   const [Image, setImage] = useState(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     fetchImage();
@@ -150,13 +153,16 @@ const Commenting = () => {
       });
 
       if (response.ok) {
-        const imageUrl = await response.json();
-        setImage(imageUrl);
+        const { image_url, title, description, tags } = await response.json();
+        setImage(image_url);
+        setTitle(title);
+        setDescription(description);
+        setTags(tags);
       } else {
-        console.error('Error fetching profile image:', response.statusText);
+        console.error('Error fetching image:', response.statusText);
       }
     } catch (error) {
-      console.error('Error fetching profile image:', error);
+      console.error('Error fetching image:', error);
     }
   };
 
@@ -205,6 +211,23 @@ const Commenting = () => {
             alt='photo'
             style={{ width: '50%', maxHeight: '400px', objectFit: 'contain' }}
           />
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px' }}>
+              <strong>Title:</strong> {title}
+            </div>
+            <div style={{ fontSize: '16px', marginTop: '10px' }}>
+              <strong>Description:</strong> {description}
+            </div>
+            <div style={{ fontSize: '16px', marginTop: '10px' }}>
+              <strong>Tags:</strong>{' '}
+              {tags.map((tag, index) => (
+                <span key={index}>
+                  {index > 0 && ', '}
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
           <div style={{ marginTop: '20px' }}>
             <ThumbUpIcon
               onClick={handleLike}
@@ -214,7 +237,7 @@ const Commenting = () => {
                 cursor: hasLiked ? 'not-allowed' : 'pointer',
               }}
             />
-            <span style={{ margin: '0 10px' }}>{likes} Likes</span>
+            <span style={{ margin: '0 10px', fontSize: '18px' }}>{likes} Likes</span>
             <ThumbDownIcon
               onClick={handleDislike}
               style={{
@@ -223,7 +246,7 @@ const Commenting = () => {
                 cursor: hasDisliked ? 'not-allowed' : 'pointer',
               }}
             />
-            <span style={{ margin: '0 10px' }}>{dislikes} Dislikes</span>
+            <span style={{ margin: '0 10px', fontSize: '18px' }}>{dislikes} Dislikes</span>
           </div>
           <div style={{ marginTop: '20px' }}>
             {isCurrentUserUploader && (

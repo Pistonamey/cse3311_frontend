@@ -59,7 +59,6 @@ function Verify2FA() {
 
     if (response.status === 200) {
     } else if (response.status === 404) {
-        console.log("not sent")
     }
 
   };

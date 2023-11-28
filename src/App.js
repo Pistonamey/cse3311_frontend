@@ -169,7 +169,7 @@ function App() {
               />
 
               <Route
-              path="/proposal"
+              path="/proposal/:quote_id"
               element={<Proposal />}
               />
               
