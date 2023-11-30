@@ -155,7 +155,7 @@ function Photographer() {
           </div>
           {(
             <div>
-              <h2>Your Photos</h2>
+              <h2>Photos</h2>
               <div
                 style={{
                   display: 'grid',
